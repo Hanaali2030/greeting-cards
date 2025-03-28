@@ -27,7 +27,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // 5) نص المناسبة
   const occasionEl = document.getElementById("occasion");
   if (occasionEl) {
-    occasionEl.innerText = `اختر بطاقتك لـ ${config.occasionText}`;
+occasionEl.innerText = `اختر بطاقتك ل${config.occasionText} 🎉`;
   }
 
   // 6) الحقوق
