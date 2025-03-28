@@ -3,7 +3,6 @@ const config = {
   logoType: "image",
 
   // 2) بيانات الشعار:
-  logoImageSrc: "images/logo.png",
   logoImageHeight: 180, // بكسل
   logoText: "جهة افتراضية",
   logoTextColor: "#006699",
