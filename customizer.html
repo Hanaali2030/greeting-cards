@@ -1,36 +1,74 @@
-<!-- customizer.html - جزء التحقق من الصور المطلوبة -->
-<script>
-  async function checkRequiredImages(designCount = 6) {
-    const missing = [];
-    const base = `https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/images/`;
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>صفحة تخصيص منصة بطاقات التهنئة</title>
+  <style>
+    body {
+      font-family: Tajawal, sans-serif;
+      direction: rtl;
+      padding: 20px;
+      text-align: center;
+      background-color: #f9f9f9;
+    }
+    .error { color: red; font-weight: bold; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
 
-    // صورة الشعار
-    const logo = await fetch(base + "logo.png");
-    if (!logo.ok) missing.push("images/logo.png");
+  <h1>صفحة تخصيص منصة بطاقات التهنئة</h1>
 
-    // صور التصاميم
-    for (let i = 1; i <= designCount; i++) {
-      const res = await fetch(base + `design${i}.jpg`);
-      if (!res.ok) missing.push(`images/design${i}.jpg`);
+  <div id="checkStatus">جارٍ فحص الصور المطلوبة...</div>
+
+  <div id="formContainer" class="hidden">
+    <!-- النموذج سيظهر هنا لاحقًا -->
+    <p>✔️ جميع الصور موجودة. يمكنك الآن تخصيص المنصة.</p>
+    <form>
+      <!-- عناصر التخصيص ستُضاف لاحقًا -->
+    </form>
+  </div>
+
+  <script>
+    const requiredImages = [
+      "images/logo.png",
+      "images/design1.jpg",
+      "images/design2.jpg",
+      "images/design3.jpg",
+      "images/design4.jpg",
+      "images/design5.jpg",
+      "images/design6.jpg"
+    ];
+
+    const checkStatus = document.getElementById("checkStatus");
+    const formContainer = document.getElementById("formContainer");
+
+    async function checkImages() {
+      const missing = [];
+
+      for (const src of requiredImages) {
+        try {
+          const res = await fetch(src, { method: 'HEAD' });
+          if (!res.ok) missing.push(src);
+        } catch {
+          missing.push(src);
+        }
+      }
+
+      if (missing.length > 0) {
+        checkStatus.innerHTML = `
+          <p class="error">⚠️ الصور التالية غير موجودة:</p>
+          <ul style="color:red">${missing.map(img => `<li>${img}</li>`).join('')}</ul>
+          <p>يرجى رفع الصور قبل بدء التخصيص.</p>
+        `;
+      } else {
+        checkStatus.style.display = 'none';
+        formContainer.classList.remove("hidden");
+      }
     }
 
-    if (missing.length > 0) {
-      const list = missing.map(name => `<li><code>${name}</code></li>`).join("\n");
-      document.getElementById("customizer-wrapper").innerHTML = `
-        <div style="background:#fff3cd; padding:20px; border-radius:8px; color:#856404; border:1px solid #ffeeba;">
-          <h3>⚠️ لم يتم العثور على الصور التالية:</h3>
-          <ul>${list}</ul>
-          <p>يرجى رفعها إلى مجلد <strong>images</strong> في مشروعك على GitHub ثم إعادة تحميل الصفحة.</p>
-        </div>
-      `;
-    } else {
-      // كل الصور موجودة - أظهر النموذج
-      document.getElementById("customizer-wrapper").style.display = "block";
-    }
-  }
+    window.addEventListener("DOMContentLoaded", checkImages);
+  </script>
 
-  // نفذ عند التحميل
-  window.addEventListener("DOMContentLoaded", () => {
-    checkRequiredImages(6); // عدد التصاميم الافتراضي
-  });
-</script>
+</body>
+</html>
