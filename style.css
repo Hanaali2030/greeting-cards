@@ -1,52 +1,44 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Amiri&family=Cairo&family=Tajawal&display=swap');
 
-/* إعدادات أساسية */
 body {
   font-family: 'Tajawal', sans-serif;
-  direction: rtl;
   text-align: center;
+  direction: rtl;
   background-color: #f9f9f9;
-  margin: 0;
   padding: 20px;
+  margin: 0;
 }
 
 h1 {
+  color: #006699;
+  font-family: 'Tajawal', sans-serif;
   font-size: 24px;
   margin-bottom: 20px;
-  color: #006699;
 }
 
-label,
-select,
-input,
-button,
-a {
+label, select, input, button, a {
   font-family: 'Tajawal', sans-serif;
   font-size: 16px;
   margin: 8px;
 }
 
-/* الحقول */
-input,
-select {
+input, select {
   padding: 6px;
   width: 80%;
   max-width: 300px;
 }
 
-/* لوحة الرسم */
 canvas {
   display: none; /* مخفي مبدئيًا */
   width: 100%;
-  max-width: 800px;
   height: auto;
+  max-width: 800px;
   margin: 20px auto;
 }
 
-/* الأزرار */
-.button,
-button,
-a.button {
+
+.button, button, a.button {
   background-color: #006699;
   color: white;
   border: none;
@@ -57,7 +49,6 @@ a.button {
   display: inline-block;
 }
 
-/* الصور المصغرة داخل الأزرار */
 a.button img.thumb {
   width: 100px;
   height: auto;
@@ -65,7 +56,6 @@ a.button img.thumb {
   margin: 0 auto;
 }
 
-/* حاويات */
 div {
   display: flex;
   flex-wrap: wrap;
@@ -74,7 +64,6 @@ div {
   padding: 20px;
 }
 
-/* أزرار تذييل الصفحة */
 .footer-buttons {
   display: flex;
   gap: 8px;
