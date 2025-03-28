@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>صفحة تخصيص البطاقات</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      max-width: 700px;
+      margin: auto;
+      padding-top: 30px;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      margin-top: 20px;
+      font-family: monospace;
+    }
+    button {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>تخصيص إعدادات البطاقات</h1>
+
+  <form id="customizerForm">
+    <label>نوع الشعار:</label>
+    <select id="logoType">
+      <option value="image">صورة</option>
+      <option value="text">نص</option>
+    </select>
+
+    <label>ارتفاع صورة الشعار (px):</label>
+    <input type="number" id="logoImageHeight" value="180">
+
+    <label>نص الشعار:</label>
+    <input type="text" id="logoText" value="جهة افتراضية">
+
+    <label>لون نص الشعار:</label>
+    <input type="color" id="logoTextColor" value="#006699">
+
+    <label>خط نص الشعار:</label>
+    <select id="logoTextFont">
+      <option value="Tajawal">Tajawal</option>
+      <option value="Cairo">Cairo</option>
+      <option value="Amiri">Amiri</option>
+    </select>
+
+    <label>حجم نص الشعار (px):</label>
+    <input type="number" id="logoTextSize" value="24">
+
+    <label>نص المناسبة (مثال: عيد الفطر):</label>
+    <input type="text" id="occasionText" value="عيد الفطر">
+
+    <label>عنوان الصفحة (title):</label>
+    <input type="text" id="pageTitle" value="بطاقات العيد - كل عام وأنتم بخير">
+
+    <label>لون الخلفية:</label>
+    <input type="color" id="backgroundColor" value="#f9f9f9">
+
+    <label>لون الأزرار:</label>
+    <input type="color" id="buttonColor" value="#006699">
+
+    <label>الجهة في الحقوق:</label>
+    <input type="text" id="footerEntityName" value="جمعية فزعة للإغاثة بالزلفي">
+
+    <label>السنة في الحقوق:</label>
+    <input type="text" id="footerYear" value="2025">
+
+    <label>عدد التصاميم (1 إلى 6):</label>
+    <input type="number" id="designCount" min="1" max="6" value="6">
+
+    <label>الرمز الأساسي لعداد الزوار:</label>
+    <input type="text" id="visitorBadgeBase" value="eid99999-cards">
+
+    <label>تفعيل عداد الزوار:</label>
+    <select id="enableVisitorBadge">
+      <option value="true">نعم</option>
+      <option value="false">لا</option>
+    </select>
+
+    <button type="button" onclick="generateConfig()">🔧 توليد ملف التخصيص</button>
+  </form>
+
+  <label>ملف <code>config.js</code> الناتج:</label>
+  <textarea id="output" readonly></textarea>
+
+  <script>
+    function generateConfig() {
+      const get = id => document.getElementById(id).value;
+      const config = {
+        logoType: get("logoType"),
+        logoImageHeight: parseInt(get("logoImageHeight")),
+        logoText: get("logoText"),
+        logoTextColor: get("logoTextColor"),
+        logoTextFont: get("logoTextFont"),
+        logoTextSize: parseInt(get("logoTextSize")),
+        occasionText: get("occasionText"),
+        pageTitle: get("pageTitle"),
+        backgroundColor: get("backgroundColor"),
+        buttonColor: get("buttonColor"),
+        footerEntityName: get("footerEntityName"),
+        footerYear: get("footerYear"),
+        visitorBadgeBase: get("visitorBadgeBase"),
+        enableVisitorBadge: get("enableVisitorBadge") === "true",
+        designCount: parseInt(get("designCount"))
+      };
+
+      const output = `const config = ${JSON.stringify(config, null, 2)};`;
+      document.getElementById("output").value = output;
+    }
+  </script>
+</body>
+</html>
