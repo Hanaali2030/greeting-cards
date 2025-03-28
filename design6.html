@@ -7,9 +7,8 @@
   <link href="style.css" rel="stylesheet"/>
 </head>
 <body>
-  <div class="logo-bar">
-    <img src="images/eid1446-001.png" alt="كل عام وأنتم بخير">
-  </div>
+  <!-- رأس الصفحة -->
+  <div id="header"></div>
 
   <h1>اكتب اسمك واختر الخط</h1>
 
@@ -36,11 +35,21 @@
 <script defer src="js/main.js"></script>
 
   <div style="margin-top: 20px;">
-    <img src="https://visitor-badge.laobi.icu/badge?page_id=eid2-cards.design6" />
+    <img src="https://visitor-badge.laobi.icu/badge?page_id=eid99999-cards.design6" />
   </div>
 
-  <footer>
-    © 2025 جميع الحقوق محفوظة لجمعية فزعة للإغاثة بالزلفي - تطوير: أبو تميم
-  </footer>
+  <!-- التذييل -->
+  <div id="footer"></div>
+
+  <!-- استدعاء ملفات الرأس والتذييل -->
+  <script>
+    fetch("header.html")
+      .then(res => res.text())
+      .then(data => document.getElementById("header").innerHTML = data);
+
+    fetch("footer.html")
+      .then(res => res.text())
+      .then(data => document.getElementById("footer").innerHTML = data);
+  </script>
 </body>
 </html>
