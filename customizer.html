@@ -1,77 +1,128 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>صفحة تخصيص منصة بطاقات التهنئة</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <style>
-    body { direction: rtl; font-family: Tajawal, sans-serif; }
-    h1 { color: #006699; }
-    .section { background: #fff; border-radius: 12px; padding: 20px; margin: 20px auto; max-width: 600px; box-shadow: 0 0 10px #ccc; }
-    label { display: block; margin: 10px 0 5px; }
-    input, select { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; }
-    button { margin-top: 20px; padding: 10px 20px; border-radius: 6px; background: #006699; color: white; border: none; cursor: pointer; }
-    .info { font-size: 14px; color: #666; margin-bottom: 20px; }
+    body { max-width: 700px; margin: auto; text-align: right; direction: rtl; }
+    label { display: block; margin-top: 20px; font-weight: bold; }
+    input, select { width: 100%; padding: 8px; margin-top: 5px; }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
   <h1>صفحة تخصيص منصة بطاقات التهنئة</h1>
 
-  <div class="section">
-    <h2>أولاً: تأكيد رفع الصور المطلوبة</h2>
-    <p class="info">قبل بدء التخصيص، تأكد من أنك رفعت الصور التالية في مجلد <code>images/</code> داخل مشروعك على GitHub:</p>
-    <ul>
-      <li><strong>الشعار:</strong> <code>images/logo.png</code></li>
-      <li><strong>تصاميم البطاقات:</strong> <code>design1.jpg</code> إلى <code>design6.jpg</code></li>
-    </ul>
-    <p>تأكد أن أسماء الملفات دقيقة (بما في ذلك الحروف الصغيرة) وأنها موجودة داخل المجلد.</p>
-    <button onclick="startCustomization()">✅ تأكيد وبدء التخصيص</button>
-  </div>
-
-  <div id="customizationForm" class="section" style="display:none">
-    <h2>ثانياً: بيانات التخصيص</h2>
-    <label>اسم الجهة (للحقوق):</label>
-    <input type="text" id="footerEntityName" placeholder="مثال: جمعية فزعة للإغاثة بالزلفي">
-
-    <label>سنة الحقوق:</label>
-    <input type="text" id="footerYear" placeholder="مثال: 2025">
-
-    <label>المناسبة (مثال: عيد الفطر):</label>
-    <input type="text" id="occasionText">
-
-    <label>عنوان الصفحة (يظهر في المتصفح):</label>
-    <input type="text" id="pageTitle">
-
-    <label>لون الخلفية:</label>
-    <input type="color" id="backgroundColor" value="#f9f9f9">
-
-    <label>لون الأزرار:</label>
-    <input type="color" id="buttonColor" value="#006699">
-
-    <label>عدد التصاميم:</label>
-    <select id="designCount">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6" selected>6</option>
+  <form id="customizerForm">
+    <!-- نوع الشعار -->
+    <label for="logoType">نوع الشعار:</label>
+    <select id="logoType">
+      <option value="image">صورة</option>
+      <option value="text">نص</option>
     </select>
 
-    <button onclick="saveCustomization()">💾 حفظ التخصيص في GitHub</button>
-  </div>
+    <!-- شعار صورة -->
+    <div id="logoImageOptions">
+      <label for="logoImageHeight">ارتفاع صورة الشعار (بكسل):</label>
+      <input type="number" id="logoImageHeight" value="180" />
+    </div>
+
+    <!-- شعار نص -->
+    <div id="logoTextOptions" class="hidden">
+      <label for="logoText">نص الشعار:</label>
+      <input type="text" id="logoText" value="جهة افتراضية" />
+
+      <label for="logoTextColor">لون النص:</label>
+      <input type="color" id="logoTextColor" value="#006699" />
+
+      <label for="logoTextFont">الخط:</label>
+      <select id="logoTextFont">
+        <option value="Tajawal">Tajawal</option>
+        <option value="Cairo">Cairo</option>
+        <option value="Amiri">Amiri</option>
+      </select>
+
+      <label for="logoTextSize">حجم الخط (بكسل):</label>
+      <input type="number" id="logoTextSize" value="24" />
+    </div>
+
+    <!-- العنوان والمناسبة -->
+    <label for="occasionText">اسم المناسبة:</label>
+    <input type="text" id="occasionText" value="عيد الفطر" />
+
+    <label for="pageTitle">عنوان الصفحة:</label>
+    <input type="text" id="pageTitle" value="بطاقات العيد - كل عام وأنتم بخير" />
+
+    <!-- الألوان -->
+    <label for="backgroundColor">لون الخلفية:</label>
+    <input type="color" id="backgroundColor" value="#f9f9f9" />
+
+    <label for="buttonColor">لون الأزرار:</label>
+    <input type="color" id="buttonColor" value="#006699" />
+
+    <!-- الحقوق -->
+    <label for="footerEntityName">الجهة المالكة:</label>
+    <input type="text" id="footerEntityName" value="جمعية فزعة للإغاثة بالزلفي" />
+
+    <label for="footerYear">السنة:</label>
+    <input type="text" id="footerYear" value="2025" />
+
+    <!-- العداد -->
+    <label for="visitorBadgeBase">كود عداد الزوار:</label>
+    <input type="text" id="visitorBadgeBase" value="eid99999-cards" />
+
+    <label for="enableVisitorBadge">
+      <input type="checkbox" id="enableVisitorBadge" checked /> تفعيل عداد الزوار
+    </label>
+
+    <!-- عدد التصاميم -->
+    <label for="designCount">عدد التصاميم:</label>
+    <input type="number" id="designCount" min="1" max="6" value="6" />
+
+    <br /><br />
+    <button type="submit">💾 حفظ التخصيص</button>
+  </form>
 
   <script>
-    function startCustomization() {
-      document.querySelector(".section").style.display = "none";
-      document.getElementById("customizationForm").style.display = "block";
-    }
+    const logoTypeSelect = document.getElementById("logoType");
+    const logoImageOptions = document.getElementById("logoImageOptions");
+    const logoTextOptions = document.getElementById("logoTextOptions");
 
-    function saveCustomization() {
-      alert("🔐 سيتم لاحقاً ربط الحفظ بـ GitHub بعد تسجيل الدخول والتوثيق.");
-      // هنا مستقبلاً: نضيف خطوة حفظ الملف عبر GitHub API
-    }
+    logoTypeSelect.addEventListener("change", () => {
+      const isImage = logoTypeSelect.value === "image";
+      logoImageOptions.classList.toggle("hidden", !isImage);
+      logoTextOptions.classList.toggle("hidden", isImage);
+    });
+
+    document.getElementById("customizerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const config = {
+        logoType: logoTypeSelect.value,
+        logoImageHeight: +document.getElementById("logoImageHeight").value,
+        logoText: document.getElementById("logoText").value,
+        logoTextColor: document.getElementById("logoTextColor").value,
+        logoTextFont: document.getElementById("logoTextFont").value,
+        logoTextSize: +document.getElementById("logoTextSize").value,
+        occasionText: document.getElementById("occasionText").value,
+        pageTitle: document.getElementById("pageTitle").value,
+        backgroundColor: document.getElementById("backgroundColor").value,
+        buttonColor: document.getElementById("buttonColor").value,
+        footerEntityName: document.getElementById("footerEntityName").value,
+        footerYear: document.getElementById("footerYear").value,
+        visitorBadgeBase: document.getElementById("visitorBadgeBase").value,
+        enableVisitorBadge: document.getElementById("enableVisitorBadge").checked,
+        designCount: +document.getElementById("designCount").value
+      };
+
+      const configText = `const config = ${JSON.stringify(config, null, 2)};`;
+      const blob = new Blob([configText], { type: 'application/javascript' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = "config.js";
+      a.click();
+    });
   </script>
 </body>
 </html>
