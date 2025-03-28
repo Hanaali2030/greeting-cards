@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <title>بطاقات العيد - كل عام وأنتم بخير</title>
   <link rel="stylesheet" href="style.css">
+
+  <!-- ملفات التخصيص -->
+  <script src="config.js"></script>
+  <script src="applyConfig.js" defer></script>
 </head>
 <body>
   <!-- رأس الصفحة -->
@@ -23,44 +27,31 @@
 
   <!-- استدعاء ملفات الرأس والتذييل وتوليد البطاقات -->
   <script>
-    // استدعاء الرأس
     fetch("header.html")
       .then(res => res.text())
       .then(data => document.getElementById("header").innerHTML = data);
 
-    // استدعاء التذييل ثم تحميل ملفات التخصيص
     fetch("footer.html")
       .then(res => res.text())
-      .then(data => {
-        document.getElementById("footer").innerHTML = data;
+      .then(data => document.getElementById("footer").innerHTML = data);
 
-        // بعد التذييل، حمّل ملفات التخصيص
-        const configScript = document.createElement("script");
-        configScript.src = "config.js";
-        document.body.appendChild(configScript);
-
-        const applyScript = document.createElement("script");
-        applyScript.src = "applyConfig.js";
-        document.body.appendChild(applyScript);
-
-        // توليد البطاقات بعد تحميل config.js
-        configScript.onload = () => {
-          const grid = document.querySelector(".grid-container");
-          if (typeof config !== "undefined" && config.designCount && grid) {
-            grid.innerHTML = ""; // إفراغ أولاً
-            for (let i = 1; i <= config.designCount; i++) {
-              const card = document.createElement("div");
-              card.className = "grid-item";
-              card.innerHTML = `
-                <a href="design${i}.html">
-                  <img src="images/design${i}.jpg" alt="تصميم ${i}">
-                </a>
-              `;
-              grid.appendChild(card);
-            }
-          }
-        };
-      });
+    // توليد البطاقات تلقائيًا حسب عدد التصاميم
+    window.addEventListener("DOMContentLoaded", () => {
+      const grid = document.querySelector(".grid-container");
+      if (typeof config !== "undefined" && config.designCount && grid) {
+        grid.innerHTML = ""; // إفراغ أولاً
+        for (let i = 1; i <= config.designCount; i++) {
+          const card = document.createElement("div");
+          card.className = "grid-item";
+          card.innerHTML = 
+            <a href="design${i}.html">
+              <img src="images/design${i}.jpg" alt="تصميم ${i}">
+            </a>
+          ;
+          grid.appendChild(card);
+        }
+      }
+    });
   </script>
 </body>
 </html>
