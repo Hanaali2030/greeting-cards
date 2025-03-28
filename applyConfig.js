@@ -18,12 +18,12 @@ window.addEventListener("DOMContentLoaded", () => {
   const logoContainer = document.getElementById("logo");
   if (logoContainer) {
     if (config.logoType === "image") {
-      logoContainer.innerHTML = `<img src="${config.logoImageSrc}" style="height:${config.logoImageHeight}px;">`;
+      logoContainer.innerHTML = `<img src="images/logo.png" style="height:${config.logoImageHeight}px;">`;
     } else {
       logoContainer.innerHTML = `<div style="font-family: ${config.logoTextFont}; font-size: ${config.logoTextSize}px; color: ${config.logoTextColor};">${config.logoText}</div>`;
     }
   }
-
+  
   // 5) نص المناسبة
   const occasionEl = document.getElementById("occasion");
   if (occasionEl) {
