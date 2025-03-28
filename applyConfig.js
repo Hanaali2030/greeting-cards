@@ -44,3 +44,12 @@ window.addEventListener("DOMContentLoaded", () => {
     counterEl.innerHTML = `<img src="${badgeUrl}" alt="زيارات الصفحة">`;
   }
 });
+
+// تأكيد ظهور الحقوق حتى لو تأخر التذييل في الظهور
+const waitForFooter = setInterval(() => {
+  const footerEl = document.getElementById("footerText");
+  if (footerEl) {
+    footerEl.innerHTML = `© ${config.footerYear} جميع الحقوق محفوظة لـ ${config.footerEntityName} - <strong>تطوير: أبو تميم</strong>`;
+    clearInterval(waitForFooter);
+  }
+}, 100);
