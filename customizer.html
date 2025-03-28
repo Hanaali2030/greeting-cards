@@ -3,112 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <title>صفحة تخصيص منصة بطاقات التهنئة</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { direction: rtl; text-align: center; font-family: 'Tajawal', sans-serif; padding: 30px; background-color: #f9f9f9; }
-    label { display: block; margin-top: 12px; font-weight: bold; }
-    input, select { padding: 6px; margin-top: 6px; width: 80%; max-width: 300px; }
-    .group { margin: 24px 0; border-top: 1px solid #ccc; padding-top: 16px; }
-    .hidden { display: none; }
-    .success { color: green; margin-bottom: 20px; }
-    button { background-color: #006699; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; }
+    body {
+      font-family: 'Tajawal', sans-serif;
+      direction: rtl;
+      text-align: center;
+      background-color: #f9f9f9;
+      padding: 20px;
+    }
+    h1 {
+      color: #000;
+    }
+    .message {
+      margin: 20px;
+      font-size: 18px;
+    }
+    .hidden {
+      display: none;
+    }
+    code {
+      background-color: #eee;
+      padding: 4px 6px;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
   <h1>صفحة تخصيص منصة بطاقات التهنئة</h1>
-  <p class="success">✔ جميع الصور موجودة. يمكنك الآن تخصيص المنصة.</p>
-
-  <form id="customForm">
-    <div class="group">
-      <label>1. نوع الشعار</label>
-      <label><input type="radio" name="logoType" value="image" checked> صورة</label>
-      <label><input type="radio" name="logoType" value="text"> نص</label>
-    </div>
-
-    <div id="logoImageOptions" class="group">
-      <label>ارتفاع الشعار (بكسل)</label>
-      <input type="number" name="logoImageHeight" value="180">
-    </div>
-
-    <div id="logoTextOptions" class="group hidden">
-      <label>نص الشعار</label>
-      <input type="text" name="logoText" value="جهة افتراضية">
-
-      <label>لون النص</label>
-      <input type="color" name="logoTextColor" value="#006699">
-
-      <label>نوع الخط</label>
-      <select name="logoTextFont">
-        <option value="Tajawal">Tajawal</option>
-        <option value="Cairo">Cairo</option>
-        <option value="Amiri">Amiri</option>
-      </select>
-
-      <label>حجم الخط</label>
-      <input type="number" name="logoTextSize" value="24">
-    </div>
-
-    <div class="group">
-      <label>2. المناسبة</label>
-      <input type="text" name="occasionText" value="عيد الفطر">
-
-      <label>3. عنوان الصفحة</label>
-      <input type="text" name="pageTitle" value="بطاقات العيد - كل عام وأنتم بخير">
-    </div>
-
-    <div class="group">
-      <label>4. لون الخلفية</label>
-      <input type="color" name="backgroundColor" value="#f9f9f9">
-
-      <label>5. لون الأزرار</label>
-      <input type="color" name="buttonColor" value="#006699">
-    </div>
-
-    <div class="group">
-      <label>6. الحقوق - اسم الجهة</label>
-      <input type="text" name="footerEntityName" value="جمعية فزعة للإغاثة بالزلفي">
-
-      <label>السنة</label>
-      <input type="text" name="footerYear" value="2025">
-    </div>
-
-    <div class="group">
-      <label>7. رمز عداد الزوار (Badge Base)</label>
-      <input type="text" name="visitorBadgeBase" value="eid99999-cards">
-
-      <label>هل تفعيل عداد الزوار؟</label>
-      <select name="enableVisitorBadge">
-        <option value="true">نعم</option>
-        <option value="false">لا</option>
-      </select>
-    </div>
-
-    <div class="group">
-      <label>8. عدد التصاميم</label>
-      <input type="number" name="designCount" min="1" max="6" value="6">
-    </div>
-
-    <div class="group">
-      <button type="submit">💾 حفظ التخصيص</button>
-    </div>
-  </form>
+  <div id="status" class="message"></div>
+  <div id="auth" class="message hidden"></div>
 
   <script>
-    const logoRadios = document.querySelectorAll("input[name='logoType']");
-    const imageOptions = document.getElementById("logoImageOptions");
-    const textOptions = document.getElementById("logoTextOptions");
+    const clientId = "Ov23liOBq92H0U6KEfAn";
 
-    logoRadios.forEach(radio => {
-      radio.addEventListener("change", () => {
-        if (radio.value === "image") {
-          imageOptions.classList.remove("hidden");
-          textOptions.classList.add("hidden");
-        } else {
-          imageOptions.classList.add("hidden");
-          textOptions.classList.remove("hidden");
-        }
+    async function startDeviceFlow() {
+      const res = await fetch("https://github.com/login/device/code", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+          client_id: clientId,
+          scope: "repo"
+        })
       });
-    });
+      const data = await res.json();
+
+      document.getElementById("auth").classList.remove("hidden");
+      document.getElementById("auth").innerHTML = `
+        <p>افتح رابط <a href="${data.verification_uri}" target="_blank">GitHub.com</a> وأدخل الرمز:</p>
+        <code>${data.user_code}</code>
+      `;
+
+      const interval = setInterval(async () => {
+        const tokenRes = await fetch("https://github.com/login/oauth/access_token", {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept': 'application/json'
+          },
+          body: new URLSearchParams({
+            client_id: clientId,
+            device_code: data.device_code,
+            grant_type: 'urn:ietf:params:oauth:grant-type:device_code'
+          })
+        });
+
+        const tokenData = await tokenRes.json();
+
+        if (tokenData.access_token) {
+          clearInterval(interval);
+          window.githubToken = tokenData.access_token;
+          document.getElementById("auth").innerHTML = "✔️ تم تسجيل الدخول نجاحًا! جاهز للتخصيص.";
+          // تابع عرض النموذج هنا بعد التوثيق
+        } else if (tokenData.error && tokenData.error !== 'authorization_pending') {
+          clearInterval(interval);
+          document.getElementById("auth").innerHTML = `حدث خطأ: ${tokenData.error}`;
+        }
+      }, data.interval * 1000);
+    }
+
+    // تحقق هل المستخدم في مشروع Fork أم لا
+    const owner = "greeting-cards"; // حسابك الأساسي
+    const repo = "eid-cards";
+    const userRepo = location.hostname.split(".")[0];
+
+    if (userRepo !== owner) {
+      document.getElementById("status").innerHTML = "✔️ جميع الصور موجودة. يمكنك الآن تخصيص المنصة.";
+      startDeviceFlow();
+    } else {
+      document.getElementById("status").innerHTML = "❌ الرجاء تسجيل الدخول بموقع GitHub والتأكد من ملكية المشروع (قم بعمل Fork أولاً).";
+    }
   </script>
 </body>
 </html>
