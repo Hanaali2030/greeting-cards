@@ -1,10 +1,10 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Amiri&family=Cairo&family=Tajawal&display=swap');
 
+/* الأساسيات */
 body {
   font-family: 'Tajawal', sans-serif;
-  text-align: center;
   direction: rtl;
+  text-align: center;
   background-color: #f9f9f9;
   padding: 20px;
   margin: 0;
@@ -12,9 +12,8 @@ body {
 
 h1 {
   color: #006699;
-  font-family: 'Tajawal', sans-serif;
   font-size: 24px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 label, select, input, button, a {
@@ -29,15 +28,16 @@ input, select {
   max-width: 300px;
 }
 
+/* Canvas للبطاقات */
 canvas {
-  display: none; /* مخفي مبدئيًا */
+  display: none;
   width: 100%;
   height: auto;
   max-width: 800px;
   margin: 20px auto;
 }
 
-
+/* أزرار */
 .button, button, a.button {
   background-color: #006699;
   color: white;
@@ -49,30 +49,6 @@ canvas {
   display: inline-block;
 }
 
-a.button img.thumb {
-  width: 100px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-div {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-  padding: 20px;
-}
-
-.footer-buttons {
-  display: flex;
-  gap: 8px;
-  justify-content: flex-start;
-  align-items: center;
-  margin-top: 20px;
-  margin-right: 10px;
-}
-
 .footer-buttons a.button {
   font-size: 13px;
   padding: 6px 12px;
@@ -80,4 +56,61 @@ div {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+}
+
+/* صور مصغرة للأزرار */
+a.button img.thumb {
+  width: 100px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* تنسيق صفحة الرئيسية */
+.logo-bar {
+  margin: 20px auto;
+}
+.logo-bar img {
+  height: 200px;
+  margin: 0 10px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  justify-items: center;
+  padding: 20px;
+}
+
+.grid-item {
+  text-align: center;
+}
+
+.grid-item img {
+  width: 100%;
+  max-width: 240px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+.grid-item img:hover {
+  transform: scale(1.05);
+}
+
+/* التذييل */
+footer {
+  margin-top: 40px;
+  font-size: 14px;
+  color: #777;
+}
+
+/* أزرار الصفحات السفلية */
+.footer-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 20px;
+  margin-right: 10px;
 }
