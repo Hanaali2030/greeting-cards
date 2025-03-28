@@ -4,66 +4,28 @@
   <meta charset="UTF-8">
   <title>بطاقات العيد - كل عام وأنتم بخير</title>
   <link rel="stylesheet" href="style.css">
+
+  <!-- ملفات التخصيص -->
+  <script src="config.js"></script>
+  <script src="applyConfig.js" defer></script>
 </head>
 <body>
   <!-- رأس الصفحة -->
   <div id="header"></div>
 
-  <h1>اختر بطاقتك لعيد الفطر 🎉</h1>
-  <div class="grid-container">
-    
-        <div class="grid-item">
-          <a href="design1.html">
-            <img src="images/design1.jpg" alt="تصميم 1">
+  <!-- نص المناسبة -->
+  <h1 id="occasion">اختر بطاقتك لعيد الفطر 🎉</h1>
 
-          </a>
-        </div>
-        
-        <div class="grid-item">
-          <a href="design2.html">
-            <img src="images/design2.jpg" alt="تصميم 2">
+  <!-- البطاقات -->
+  <div class="grid-container"></div>
 
-          </a>
-        </div>
-        
-        <div class="grid-item">
-          <a href="design3.html">
-            <img src="images/design3.jpg" alt="تصميم 3">
+  <!-- عداد الزوار -->
+  <div id="visitorBadge" style="margin-top: 20px;"></div>
 
-          </a>
-        </div>
-        
-        <div class="grid-item">
-          <a href="design4.html">
-            <img src="images/design4.jpg" alt="تصميم 4">
-
-          </a>
-        </div>
-
-        <div class="grid-item">
-          <a href="design5.html">
-            <img src="images/design5.jpg" alt="تصميم 5">
-
-          </a>
-        </div>
-
-             <div class="grid-item">
-          <a href="design6.html">
-            <img src="images/design6.jpg" alt="تصميم 6">
-
-          </a>
-        </div>
-
-               
-  </div>
-
-     <div style="margin-top: 20px;">
-    <img src="https://visitor-badge.laobi.icu/badge?page_id=eid99999-cards.index" />
-  </div>
   <!-- التذييل -->
   <div id="footer"></div>
 
-  <!-- استدعاء ملفات الرأس والتذييل -->
+  <!-- استدعاء ملفات الرأس والتذييل وتوليد البطاقات -->
   <script>
     fetch("header.html")
       .then(res => res.text())
@@ -72,6 +34,24 @@
     fetch("footer.html")
       .then(res => res.text())
       .then(data => document.getElementById("footer").innerHTML = data);
+
+    // توليد البطاقات تلقائيًا حسب عدد التصاميم
+    window.addEventListener("DOMContentLoaded", () => {
+      const grid = document.querySelector(".grid-container");
+      if (typeof config !== "undefined" && config.designCount && grid) {
+        grid.innerHTML = ""; // إفراغ أولاً
+        for (let i = 1; i <= config.designCount; i++) {
+          const card = document.createElement("div");
+          card.className = "grid-item";
+          card.innerHTML = `
+            <a href="design${i}.html">
+              <img src="images/design${i}.jpg" alt="تصميم ${i}">
+            </a>
+          `;
+          grid.appendChild(card);
+        }
+      }
+    });
   </script>
 </body>
 </html>
