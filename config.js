@@ -1,6 +1,6 @@
 const config = {
   // 1) نوع الشعار: "text" أو "image"
-  logoType: "image",
+  logoType: "text",
 
   // 2) بيانات الشعار:
   logoImageHeight: 60, // بكسل
