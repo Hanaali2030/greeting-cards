@@ -3,72 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <title>صفحة تخصيص منصة بطاقات التهنئة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <style>
-    body {
-      max-width: 700px;
-      margin: auto;
-      padding-top: 30px;
-    }
-    h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-    input, select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-    }
-    textarea {
-      width: 100%;
-      height: 150px;
-      margin-top: 20px;
-      font-family: monospace;
-    }
-    button {
-      margin-top: 20px;
-    }
+    body { direction: rtl; font-family: Tajawal, sans-serif; }
+    h1 { color: #006699; }
+    .section { background: #fff; border-radius: 12px; padding: 20px; margin: 20px auto; max-width: 600px; box-shadow: 0 0 10px #ccc; }
+    label { display: block; margin: 10px 0 5px; }
+    input, select { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; }
+    button { margin-top: 20px; padding: 10px 20px; border-radius: 6px; background: #006699; color: white; border: none; cursor: pointer; }
+    .info { font-size: 14px; color: #666; margin-bottom: 20px; }
   </style>
 </head>
 <body>
-  <h1>تخصيص إعدادات البطاقات</h1>
+  <h1>صفحة تخصيص منصة بطاقات التهنئة</h1>
 
-  <form id="customizerForm">
-    <label>نوع الشعار:</label>
-    <select id="logoType">
-      <option value="image">صورة</option>
-      <option value="text">نص</option>
-    </select>
+  <div class="section">
+    <h2>أولاً: تأكيد رفع الصور المطلوبة</h2>
+    <p class="info">قبل بدء التخصيص، تأكد من أنك رفعت الصور التالية في مجلد <code>images/</code> داخل مشروعك على GitHub:</p>
+    <ul>
+      <li><strong>الشعار:</strong> <code>images/logo.png</code></li>
+      <li><strong>تصاميم البطاقات:</strong> <code>design1.jpg</code> إلى <code>design6.jpg</code></li>
+    </ul>
+    <p>تأكد أن أسماء الملفات دقيقة (بما في ذلك الحروف الصغيرة) وأنها موجودة داخل المجلد.</p>
+    <button onclick="startCustomization()">✅ تأكيد وبدء التخصيص</button>
+  </div>
 
-    <label>ارتفاع صورة الشعار (px):</label>
-    <input type="number" id="logoImageHeight" value="180">
+  <div id="customizationForm" class="section" style="display:none">
+    <h2>ثانياً: بيانات التخصيص</h2>
+    <label>اسم الجهة (للحقوق):</label>
+    <input type="text" id="footerEntityName" placeholder="مثال: جمعية فزعة للإغاثة بالزلفي">
 
-    <label>نص الشعار:</label>
-    <input type="text" id="logoText" value="جهة افتراضية">
+    <label>سنة الحقوق:</label>
+    <input type="text" id="footerYear" placeholder="مثال: 2025">
 
-    <label>لون نص الشعار:</label>
-    <input type="color" id="logoTextColor" value="#006699">
+    <label>المناسبة (مثال: عيد الفطر):</label>
+    <input type="text" id="occasionText">
 
-    <label>خط نص الشعار:</label>
-    <select id="logoTextFont">
-      <option value="Tajawal">Tajawal</option>
-      <option value="Cairo">Cairo</option>
-      <option value="Amiri">Amiri</option>
-    </select>
-
-    <label>حجم نص الشعار (px):</label>
-    <input type="number" id="logoTextSize" value="24">
-
-    <label>نص المناسبة (مثال: عيد الفطر):</label>
-    <input type="text" id="occasionText" value="عيد الفطر">
-
-    <label>عنوان الصفحة (title):</label>
-    <input type="text" id="pageTitle" value="بطاقات العيد - كل عام وأنتم بخير">
+    <label>عنوان الصفحة (يظهر في المتصفح):</label>
+    <input type="text" id="pageTitle">
 
     <label>لون الخلفية:</label>
     <input type="color" id="backgroundColor" value="#f9f9f9">
@@ -76,53 +49,28 @@
     <label>لون الأزرار:</label>
     <input type="color" id="buttonColor" value="#006699">
 
-    <label>الجهة في الحقوق:</label>
-    <input type="text" id="footerEntityName" value="جمعية فزعة للإغاثة بالزلفي">
-
-    <label>السنة في الحقوق:</label>
-    <input type="text" id="footerYear" value="2025">
-
-    <label>عدد التصاميم (1 إلى 6):</label>
-    <input type="number" id="designCount" min="1" max="6" value="6">
-
-    <label>الرمز الأساسي لعداد الزوار:</label>
-    <input type="text" id="visitorBadgeBase" value="eid99999-cards">
-
-    <label>تفعيل عداد الزوار:</label>
-    <select id="enableVisitorBadge">
-      <option value="true">نعم</option>
-      <option value="false">لا</option>
+    <label>عدد التصاميم:</label>
+    <select id="designCount">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6" selected>6</option>
     </select>
 
-    <button type="button" onclick="generateConfig()">🔧 توليد ملف التخصيص</button>
-  </form>
-
-  <label>ملف <code>config.js</code> الناتج:</label>
-  <textarea id="output" readonly></textarea>
+    <button onclick="saveCustomization()">💾 حفظ التخصيص في GitHub</button>
+  </div>
 
   <script>
-    function generateConfig() {
-      const get = id => document.getElementById(id).value;
-      const config = {
-        logoType: get("logoType"),
-        logoImageHeight: parseInt(get("logoImageHeight")),
-        logoText: get("logoText"),
-        logoTextColor: get("logoTextColor"),
-        logoTextFont: get("logoTextFont"),
-        logoTextSize: parseInt(get("logoTextSize")),
-        occasionText: get("occasionText"),
-        pageTitle: get("pageTitle"),
-        backgroundColor: get("backgroundColor"),
-        buttonColor: get("buttonColor"),
-        footerEntityName: get("footerEntityName"),
-        footerYear: get("footerYear"),
-        visitorBadgeBase: get("visitorBadgeBase"),
-        enableVisitorBadge: get("enableVisitorBadge") === "true",
-        designCount: parseInt(get("designCount"))
-      };
+    function startCustomization() {
+      document.querySelector(".section").style.display = "none";
+      document.getElementById("customizationForm").style.display = "block";
+    }
 
-      const output = `const config = ${JSON.stringify(config, null, 2)};`;
-      document.getElementById("output").value = output;
+    function saveCustomization() {
+      alert("🔐 سيتم لاحقاً ربط الحفظ بـ GitHub بعد تسجيل الدخول والتوثيق.");
+      // هنا مستقبلاً: نضيف خطوة حفظ الملف عبر GitHub API
     }
   </script>
 </body>
