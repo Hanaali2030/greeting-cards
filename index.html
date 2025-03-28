@@ -43,11 +43,11 @@
         for (let i = 1; i <= config.designCount; i++) {
           const card = document.createElement("div");
           card.className = "grid-item";
-          card.innerHTML = 
+          card.innerHTML = `
             <a href="design${i}.html">
               <img src="images/design${i}.jpg" alt="تصميم ${i}">
             </a>
-          ;
+          `;
           grid.appendChild(card);
         }
       }
