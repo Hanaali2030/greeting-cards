@@ -6,9 +6,9 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="logo-bar">
-    <img src="images/eid1446-001.png" alt="كل عام وأنتم بخير">
-  </div>
+  <!-- رأس الصفحة -->
+  <div id="header"></div>
+
   <h1>اختر بطاقتك لعيد الفطر 🎉</h1>
   <div class="grid-container">
     
@@ -60,35 +60,18 @@
      <div style="margin-top: 20px;">
     <img src="https://visitor-badge.laobi.icu/badge?page_id=eid99999-cards.index" />
   </div>
-    <footer>
-    © 2025 جميع الحقوق محفوظة لجمعية فزعة للإغاثة بالزلفي - تطوير: أبو تميم
-  </footer>
-<div style="
-  position: fixed;
-  bottom: 6px;
-  left: 12px;
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  z-index: 9999;
-">
-  <a href="stats.html" style="
-    font-size: 10px;
-    background-color: #444;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 4px;
-    text-decoration: none;
-  ">📈 الإحصائيات</a>
+  <!-- التذييل -->
+  <div id="footer"></div>
 
-  <a href="top.html" style="
-    font-size: 10px;
-    background-color: #006699;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 4px;
-    text-decoration: none;
-  ">📊 الأكثر تفاعلًا</a>
-</div>
+  <!-- استدعاء ملفات الرأس والتذييل -->
+  <script>
+    fetch("header.html")
+      .then(res => res.text())
+      .then(data => document.getElementById("header").innerHTML = data);
+
+    fetch("footer.html")
+      .then(res => res.text())
+      .then(data => document.getElementById("footer").innerHTML = data);
+  </script>
 </body>
 </html>
