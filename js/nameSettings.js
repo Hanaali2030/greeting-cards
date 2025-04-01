@@ -1,9 +1,26 @@
-// nameSettings.js
 const nameSettings = {
-      1: { fontSize: 35, fontColor: '#520205', x: 300, y: 1380 },
-      2: { fontSize: 38, fontColor: '#2f2f2f', x: 315, y: 1310 },
-      3: { fontSize: 55, fontColor: '#333333', x: 300, y: 1365 },
-      4: { fontSize: 40, fontColor: '#000000', x: 300, y: 1300 },
-      5: { fontSize: 38, fontColor: '#0f6f2f', x: 300, y: 1065 },
-      6: { fontSize: 30, fontColor: '#4e615f', x: 300, y: 950 }
+  "1": {
+    "fontSize": 50,
+    "fontColor": "#f40b0b",
+    "x": 449,
+    "y": 74
+  },
+  "2": {
+    "fontSize": 16,
+    "fontColor": "#5e1111",
+    "x": 174,
+    "y": 261
+  },
+  "3": {
+    "fontSize": 30,
+    "fontColor": "#000000",
+    "x": 579,
+    "y": 1196
+  },
+  "4": {
+    "fontSize": 12,
+    "fontColor": "#8f6435",
+    "x": 732,
+    "y": 199
+  }
 };
