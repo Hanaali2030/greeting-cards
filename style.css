@@ -16,7 +16,7 @@ h1 {
   margin-bottom: 30px;
 }
 
-label, select, input, button, a {
+label, select, input {
   font-family: 'Tajawal', sans-serif;
   font-size: 16px;
   margin: 8px;
@@ -38,7 +38,7 @@ canvas {
 }
 
 /* أزرار */
-.button, button, a.button {
+.button, button, a.button, a {
   background-color: #006699;
   color: white;
   border: none;
@@ -75,28 +75,44 @@ a.button img.thumb {
   margin: 0 10px;
 }
 
+      /* شبكة الصور الرئيسية */
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 24px;
-  justify-items: center;
+  justify-items: center;  /* توسيط العناصر على المحور الأفقي */
   padding: 20px;
+  /* الوضع الافتراضي: بطاقتان بكل صف */
+  grid-template-columns: repeat(2, 1fr);
 }
 
-.grid-item {
-  text-align: center;
-}
+    .grid-item img {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
 
-.grid-item img {
-  width: 100%;
-  max-width: 240px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
+/* عندما يصبح العرض كبير (مثلاً 900px فأكثر)، اعرض 4 بطاقات */
+@media (min-width: 1000px) {
+  .grid-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+    .grid-item img {
+      width: 100%;
+      max-width: 240px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
 }
-.grid-item img:hover {
-  transform: scale(1.05);
-}
+    .grid-item {
+      text-align: center;
+    }
+
+    .grid-item img:hover {
+      transform: scale(1.05);
+    }
 
 /* التذييل */
 footer {
