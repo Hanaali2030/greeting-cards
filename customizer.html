@@ -12,35 +12,30 @@
       padding: 40px 20px;
       text-align: center;
     }
-
     h1, h2 {
       color: #006699;
       margin-bottom: 16px;
     }
-
     p {
       font-size: 16px;
       margin-bottom: 20px;
     }
-
     ul {
       list-style: none;
       padding: 0;
       font-size: 15px;
+      line-height: 1.8;
     }
-
     ul li {
       margin: 6px 0;
     }
-
     label {
       display: block;
       margin: 12px auto 6px;
       font-weight: bold;
     }
-
     input, select {
-      padding: 8px;
+      padding: 10px;
       width: 100%;
       max-width: 320px;
       border-radius: 5px;
@@ -48,9 +43,13 @@
       font-size: 15px;
       margin-bottom: 10px;
     }
-
+    input[type="color"] {
+      height: 40px;
+      padding: 0;
+      cursor: pointer;
+    }
     button {
-      padding: 10px 20px;
+      padding: 12px 24px;
       background-color: #006699;
       color: white;
       border: none;
@@ -59,51 +58,58 @@
       font-size: 16px;
       margin-top: 20px;
     }
-
     .hidden {
       display: none;
     }
-
     .success {
       color: green;
       margin-top: 10px;
     }
-
     .error {
       color: red;
       margin-top: 10px;
     }
-
     .section {
       margin-bottom: 40px;
-      max-width: 500px;
+      max-width: 600px;
       margin-left: auto;
       margin-right: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
-
     hr {
       margin: 40px 0;
       border: none;
       border-top: 1px solid #ccc;
     }
+    code {
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
   <div class="section">
-    <h1>📂 التحقق من الصور المطلوبة</h1>
-    <p>يجب رفع الصور التالية يدويًا إلى مجلد <code>images/</code> قبل تخصيص المنصة:</p>
+    <h1>التحقق من الصور المطلوبة</h1>
+    <p>قبل التخصيص، تأكد من رفع هذه الصور إلى مجلد <code>images/</code> داخل مشروعك:</p>
     <ul>
       <li><code>images/logo.png</code> — شعار الجهة</li>
-      <li><code>images/design1.jpg</code> إلى <code>images/design6.jpg</code> — تصاميم البطاقات</li>
+      <li><code>images/design1.jpg</code> — تصميم البطاقة 1</li>
+      <li><code>images/design2.jpg</code> — تصميم البطاقة 2</li>
+      <li><code>images/design3.jpg</code> — تصميم البطاقة 3</li>
+      <li><code>images/design4.jpg</code> — تصميم البطاقة 4</li>
+      <li><code>images/design5.jpg</code> — تصميم البطاقة 5</li>
+      <li><code>images/design6.jpg</code> — تصميم البطاقة 6</li>
     </ul>
     <button onclick="verifyImages()">✅ تحقق من وجود الصور</button>
     <p id="imageStatus"></p>
   </div>
 
-  <hr>
-
   <div class="section hidden" id="step2">
-    <h2>🛠 تخصيص الإعدادات</h2>
+    <h2>تخصيص إعدادات المنصة</h2>
     <form id="customForm">
       <label>نوع الشعار:</label>
       <select name="logoType" onchange="toggleLogoOptions(this.value)">
@@ -117,7 +123,7 @@
       </div>
 
       <div id="logoTextOptions" class="hidden">
-        <label>النص:</label>
+        <label>نص الشعار:</label>
         <input type="text" name="logoText" value="جهة افتراضية">
 
         <label>لون النص:</label>
@@ -134,7 +140,7 @@
         <input type="number" name="logoTextSize" value="24">
       </div>
 
-      <label>المناسبة (مثل: التخرج، رمضان):</label>
+      <label>المناسبة:</label>
       <input type="text" name="occasionText" value="عيد الفطر">
 
       <label>عنوان الصفحة:</label>
@@ -152,7 +158,7 @@
       <label>السنة:</label>
       <input type="text" name="footerYear" value="2025">
 
-      <label>رمز عداد الزوار (مثل eid99999-cards):</label>
+      <label>رمز عداد الزوار:</label>
       <input type="text" name="visitorBadgeBase" value="eid99999-cards">
 
       <label>عدد التصاميم (من 1 إلى 6):</label>
@@ -161,8 +167,6 @@
       <button type="submit">💾 تحميل ملف التخصيص config.js</button>
     </form>
     <p id="downloadStatus" class="success"></p>
-    <p style="font-size: 14px; color: #555;">بعد التحميل، قم باستبدال الملف داخل مجلد المشروع:</p>
-    <code style="background-color: #eee; padding: 5px 10px;">/config.js</code>
   </div>
 
   <script>
@@ -188,7 +192,7 @@
         status.className = "success";
         document.getElementById("step2").classList.remove("hidden");
       } else {
-        status.innerHTML = `❌ الصور التالية غير موجودة:<br>${missing.map(f => `<code>images/${f}</code>`).join("<br>")}`;
+        status.innerHTML = `❌ لم يتم العثور على الصور التالية:<br>${missing.map(f => `<code>images/${f}</code>`).join("<br>")}`;
         status.className = "error";
       }
     }
@@ -213,6 +217,7 @@
         enableVisitorBadge: true,
         designCount: parseInt(form.get("designCount")) || 6
       };
+
       const blob = new Blob([`const config = ${JSON.stringify(config, null, 2)};`], { type: "application/javascript" });
       const url = URL.createObjectURL(blob);
 
@@ -221,7 +226,7 @@
       link.download = "config.js";
       link.click();
 
-      document.getElementById("downloadStatus").textContent = "✅ تم تحميل ملف config.js. لا تنسَ رفعه إلى مجلد المشروع.";
+      document.getElementById("downloadStatus").innerHTML = "✅ تم تحميل ملف <code>config.js</code> بنجاح. قم باستبداله داخل مجلد المشروع الرئيسي.";
     });
   </script>
 </body>
