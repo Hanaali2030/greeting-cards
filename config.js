@@ -2,7 +2,7 @@ const config = {
   "logoType": "image",
   "logoImageShape": "responsive",
   "logoImageHeight": 180,
-  "logoImageWidthPercent": 50,
+  "logoImageWidthPercent": 20,
   "logoText": "جهة افتراضية",
   "logoTextColor": "#006699",
   "logoTextFont": "Tajawal",
