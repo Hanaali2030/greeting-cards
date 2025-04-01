@@ -130,3 +130,21 @@ footer {
   margin-top: 20px;
   margin-right: 10px;
 }
+.primary-btn {
+  background-color: #f57c00;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 10px;
+  font-family: 'Tajawal', sans-serif;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.primary-btn:hover {
+  background-color: #ef6c00;
+}
