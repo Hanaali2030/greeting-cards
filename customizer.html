@@ -6,110 +6,163 @@
   <link href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap" rel="stylesheet">
   <style>
     body {
-      direction: rtl;
       font-family: 'Tajawal', sans-serif;
-      background-color: #f5f8fa;
-      padding: 30px;
-      color: #333;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 40px 20px;
+      text-align: center;
     }
+
     h1, h2 {
-      color: #0c4a6e;
-      margin-bottom: 10px;
+      color: #006699;
+      margin-bottom: 16px;
     }
-    .hidden { display: none; }
-    .success { color: green; margin-top: 10px; }
-    .error { color: red; margin-top: 10px; }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      font-size: 15px;
+    }
+
+    ul li {
+      margin: 6px 0;
+    }
+
     label {
       display: block;
-      margin-top: 15px;
+      margin: 12px auto 6px;
       font-weight: bold;
     }
-    input, select, button {
+
+    input, select {
+      padding: 8px;
       width: 100%;
-      max-width: 400px;
-      padding: 10px;
-      margin-top: 6px;
-      border-radius: 6px;
+      max-width: 320px;
+      border-radius: 5px;
       border: 1px solid #ccc;
       font-size: 15px;
-      box-sizing: border-box;
+      margin-bottom: 10px;
     }
-    input[type="color"] {
-      height: 40px;
-    }
+
     button {
-      background-color: #0c4a6e;
+      padding: 10px 20px;
+      background-color: #006699;
       color: white;
       border: none;
+      border-radius: 6px;
       cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s;
+      font-size: 16px;
+      margin-top: 20px;
     }
-    button:hover {
-      background-color: #075985;
+
+    .hidden {
+      display: none;
     }
-    ul {
-      line-height: 1.8;
+
+    .success {
+      color: green;
+      margin-top: 10px;
     }
-    code {
-      background-color: #eef1f3;
-      padding: 2px 4px;
-      border-radius: 4px;
-      font-size: 14px;
+
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+
+    .section {
+      margin-bottom: 40px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    hr {
+      margin: 40px 0;
+      border: none;
+      border-top: 1px solid #ccc;
     }
   </style>
 </head>
 <body>
-  <h1>📂 التحقق من وجود الصور قبل التخصيص</h1>
-  <p>يرجى رفع الصور التالية يدويًا إلى مجلد <code>images/</code> في مشروعك قبل المتابعة:</p>
-  <ul>
-    <li><code>logo.png</code> (شعار الجهة)</li>
-    <li><code>design1.jpg</code> إلى <code>design6.jpg</code> (تصاميم البطاقات)</li>
-  </ul>
+  <div class="section">
+    <h1>📂 التحقق من الصور المطلوبة</h1>
+    <p>يجب رفع الصور التالية يدويًا إلى مجلد <code>images/</code> قبل تخصيص المنصة:</p>
+    <ul>
+      <li><code>images/logo.png</code> — شعار الجهة</li>
+      <li><code>images/design1.jpg</code> إلى <code>images/design6.jpg</code> — تصاميم البطاقات</li>
+    </ul>
+    <button onclick="verifyImages()">✅ تحقق من وجود الصور</button>
+    <p id="imageStatus"></p>
+  </div>
 
-  <button onclick="verifyImages()">✅ تحقق من وجود الصور</button>
-  <p id="imageStatus"></p>
+  <hr>
 
-  <!-- قسم التخصيص يظهر فقط بعد تحقق الصور -->
-  <div id="step2" class="hidden">
+  <div class="section hidden" id="step2">
     <h2>🛠 تخصيص الإعدادات</h2>
     <form id="customForm">
-      <label>نوع الشعار:
-        <select name="logoType" onchange="toggleLogoOptions(this.value)">
-          <option value="image">صورة</option>
-          <option value="text">نص</option>
-        </select>
-      </label>
+      <label>نوع الشعار:</label>
+      <select name="logoType" onchange="toggleLogoOptions(this.value)">
+        <option value="image">صورة</option>
+        <option value="text">نص</option>
+      </select>
 
       <div id="logoImageOptions">
-        <label>ارتفاع الصورة (بالبكسل): <input type="number" name="logoImageHeight" value="180"></label>
+        <label>ارتفاع الشعار (بكسل):</label>
+        <input type="number" name="logoImageHeight" value="180">
       </div>
 
       <div id="logoTextOptions" class="hidden">
-        <label>النص: <input type="text" name="logoText" value="جهة افتراضية"></label>
-        <label>لون النص: <input type="color" name="logoTextColor" value="#006699"></label>
-        <label>نوع الخط:
-          <select name="logoTextFont">
-            <option value="Tajawal">Tajawal</option>
-            <option value="Amiri">Amiri</option>
-            <option value="Cairo">Cairo</option>
-          </select>
-        </label>
-        <label>حجم الخط: <input type="number" name="logoTextSize" value="24"></label>
+        <label>النص:</label>
+        <input type="text" name="logoText" value="جهة افتراضية">
+
+        <label>لون النص:</label>
+        <input type="color" name="logoTextColor" value="#006699">
+
+        <label>نوع الخط:</label>
+        <select name="logoTextFont">
+          <option value="Tajawal">Tajawal</option>
+          <option value="Amiri">Amiri</option>
+          <option value="Cairo">Cairo</option>
+        </select>
+
+        <label>حجم الخط:</label>
+        <input type="number" name="logoTextSize" value="24">
       </div>
 
-      <label>المناسبة (يتم دمجها مع "اختر بطاقتك لـ"): <input type="text" name="occasionText" value="عيد الفطر"></label>
-      <label>عنوان الصفحة: <input type="text" name="pageTitle" value="بطاقات العيد - كل عام وأنتم بخير"></label>
-      <label>لون الخلفية: <input type="color" name="backgroundColor" value="#f9f9f9"></label>
-      <label>لون الأزرار: <input type="color" name="buttonColor" value="#006699"></label>
-      <label>الجهة في التذييل: <input type="text" name="footerEntityName" value="جمعية فزعة للإغاثة بالزلفي"></label>
-      <label>السنة: <input type="text" name="footerYear" value="2025"></label>
-      <label>رمز عداد الزوار (مثل eid99999-cards): <input type="text" name="visitorBadgeBase" value="eid99999-cards"></label>
-      <label>عدد التصاميم (من 1 إلى 6): <input type="number" name="designCount" value="6" min="1" max="6"></label>
+      <label>المناسبة (مثل: التخرج، رمضان):</label>
+      <input type="text" name="occasionText" value="عيد الفطر">
+
+      <label>عنوان الصفحة:</label>
+      <input type="text" name="pageTitle" value="بطاقات العيد - كل عام وأنتم بخير">
+
+      <label>لون الخلفية:</label>
+      <input type="color" name="backgroundColor" value="#f9f9f9">
+
+      <label>لون الأزرار:</label>
+      <input type="color" name="buttonColor" value="#006699">
+
+      <label>الجهة في التذييل:</label>
+      <input type="text" name="footerEntityName" value="جمعية فزعة للإغاثة بالزلفي">
+
+      <label>السنة:</label>
+      <input type="text" name="footerYear" value="2025">
+
+      <label>رمز عداد الزوار (مثل eid99999-cards):</label>
+      <input type="text" name="visitorBadgeBase" value="eid99999-cards">
+
+      <label>عدد التصاميم (من 1 إلى 6):</label>
+      <input type="number" name="designCount" min="1" max="6" value="6">
 
       <button type="submit">💾 تحميل ملف التخصيص config.js</button>
     </form>
-    <p id="downloadStatus"></p>
+    <p id="downloadStatus" class="success"></p>
+    <p style="font-size: 14px; color: #555;">بعد التحميل، قم باستبدال الملف داخل مجلد المشروع:</p>
+    <code style="background-color: #eee; padding: 5px 10px;">/config.js</code>
   </div>
 
   <script>
@@ -131,11 +184,11 @@
       }));
 
       if (missing.length === 0) {
-        status.textContent = "✅ تم العثور على جميع الصور بنجاح. يمكنك الآن تخصيص المنصة.";
+        status.textContent = "✅ تم العثور على جميع الصور. يمكنك الآن تخصيص المنصة.";
         status.className = "success";
         document.getElementById("step2").classList.remove("hidden");
       } else {
-        status.innerHTML = `❌ الصور التالية غير موجودة:<br>${missing.join("<br>")}`;
+        status.innerHTML = `❌ الصور التالية غير موجودة:<br>${missing.map(f => `<code>images/${f}</code>`).join("<br>")}`;
         status.className = "error";
       }
     }
@@ -160,9 +213,7 @@
         enableVisitorBadge: true,
         designCount: parseInt(form.get("designCount")) || 6
       };
-      const blob = new Blob([
-        `const config = ${JSON.stringify(config, null, 2)};`
-      ], { type: "application/javascript" });
+      const blob = new Blob([`const config = ${JSON.stringify(config, null, 2)};`], { type: "application/javascript" });
       const url = URL.createObjectURL(blob);
 
       const link = document.createElement("a");
@@ -170,7 +221,7 @@
       link.download = "config.js";
       link.click();
 
-      document.getElementById("downloadStatus").textContent = "✅ تم إنشاء ملف التخصيص بنجاح. قم باستبداله داخل مشروعك.";
+      document.getElementById("downloadStatus").textContent = "✅ تم تحميل ملف config.js. لا تنسَ رفعه إلى مجلد المشروع.";
     });
   </script>
 </body>
