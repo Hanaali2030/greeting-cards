@@ -11,7 +11,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // 3) تغيير لون الأزرار
   const style = document.createElement("style");
-  style.innerHTML = `.button, button, a.button { background-color: ${config.buttonColor || "#006699"} !important; }`;
+  style.innerHTML = `.primary-btn, .button, button, a.button { background-color: ${config.buttonColor || "#006699"} !important; }`;
   document.head.appendChild(style);
 
   // 4) الشعار - ننتظر تحميل header.html
