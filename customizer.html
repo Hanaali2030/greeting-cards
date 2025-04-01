@@ -1,27 +1,36 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>تخصيص منصة بطاقات التهنئة</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap" rel="stylesheet" />
   <style>
     body {
       direction: rtl;
       font-family: 'Tajawal', sans-serif;
       background-color: #f9f9f9;
       padding: 20px;
-      max-width: 800px;
       margin: auto;
+      max-width: 800px;
+      text-align: center;
     }
     h1, h2 {
-      text-align: center;
       color: #006699;
       margin-bottom: 15px;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    ul li {
+      margin: 4px 0;
+      font-weight: bold;
     }
     label {
       display: block;
       margin-top: 15px;
       font-weight: bold;
+      text-align: right;
     }
     input[type="text"],
     input[type="number"],
@@ -35,14 +44,13 @@
     input[type="color"] {
       width: 60px;
       height: 35px;
-      padding: 0;
+      margin-top: 5px;
       border: none;
       cursor: pointer;
-      margin-top: 5px;
     }
     button {
-      margin-top: 20px;
-      padding: 10px 20px;
+      margin-top: 25px;
+      padding: 12px 24px;
       background-color: #006699;
       color: white;
       border: none;
@@ -52,33 +60,37 @@
       font-family: 'Tajawal', sans-serif;
     }
     .hidden { display: none; }
-    .success { color: green; font-weight: bold; }
-    .error { color: red; font-weight: bold; }
-    footer {
-      margin-top: 40px;
-      text-align: center;
-      color: #777;
-      font-size: 14px;
-    }
+    .success { color: green; font-weight: bold; margin-top: 10px; }
+    .error { color: red; font-weight: bold; margin-top: 10px; }
     .section {
-      background-color: #fff;
+      background-color: #ffffff;
       padding: 20px;
-      border-radius: 10px;
+      border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.05);
       margin-top: 20px;
+    }
+    footer {
+      margin-top: 50px;
+      font-size: 14px;
+      color: #777;
     }
   </style>
 </head>
 <body>
 
-  <h1>تخصيص منصة بطاقات التهنئة</h1>
+  <h1>🎨 تخصيص منصة بطاقات التهنئة</h1>
 
   <div class="section">
-    <h2>📂 تحقق من رفع الصور</h2>
-    <p>يرجى التأكد من رفع الصور التالية داخل مجلد <code>images/</code>:</p>
+    <h2>📂 تأكد من رفع الصور</h2>
+    <p>يجب رفع الصور التالية داخل مجلد <code>images/</code> في مشروعك قبل البدء بالتخصيص:</p>
     <ul>
-      <li><strong>logo.png</strong> (الشعار)</li>
-      <li><strong>design1.jpg</strong> إلى <strong>design6.jpg</strong> (تصاميم البطاقات)</li>
+      <li>logo.png (شعار الجهة)</li>
+      <li>design1.jpg</li>
+      <li>design2.jpg</li>
+      <li>design3.jpg</li>
+      <li>design4.jpg</li>
+      <li>design5.jpg</li>
+      <li>design6.jpg</li>
     </ul>
     <button onclick="verifyImages()">✅ تحقق من وجود الصور</button>
     <p id="imageStatus"></p>
@@ -87,8 +99,6 @@
   <div id="step2" class="section hidden">
     <h2>🛠 إعدادات التخصيص</h2>
     <form id="customForm">
-
-      <!-- الشعار -->
       <label>نوع الشعار:</label>
       <select name="logoType" onchange="toggleLogoOptions(this.value)">
         <option value="image">صورة</option>
@@ -103,7 +113,7 @@
         </select>
 
         <div id="fixedHeightOption">
-          <label>ارتفاع الصورة (بكسل):</label>
+          <label>الارتفاع بالبكسل:</label>
           <input type="number" name="logoImageHeight" value="180">
         </div>
 
@@ -128,7 +138,6 @@
         <input type="number" name="logoTextSize" value="24">
       </div>
 
-      <!-- نصوص وألوان -->
       <label>المناسبة (مثال: العيد، التخرج):</label>
       <input type="text" name="occasionText" value="عيد الفطر">
 
@@ -141,23 +150,21 @@
       <label>لون الأزرار:</label>
       <input type="color" name="buttonColor" value="#006699">
 
-      <!-- الحقوق -->
       <label>الجهة في التذييل:</label>
       <input type="text" name="footerEntityName" value="جمعية فزعة للإغاثة بالزلفي">
 
       <label>السنة:</label>
       <input type="text" name="footerYear" value="2025">
 
-      <!-- عداد الزوار -->
-      <label>رمز عداد الزوار:</label>
+      <label>رمز عداد الزوار (مثال: eid99999-cards):</label>
       <input type="text" name="visitorBadgeBase" value="eid99999-cards">
 
       <label><input type="checkbox" name="enableVisitorBadge" checked> تفعيل عداد الزوار</label>
 
-      <label>عدد التصاميم (من 1 إلى 6):</label>
+      <label>عدد التصاميم:</label>
       <input type="number" name="designCount" value="6" min="1" max="6">
 
-      <button type="submit">📥 تحميل ملف config.js</button>
+      <button type="submit">📥 تحميل ملف التخصيص config.js</button>
     </form>
     <p id="downloadStatus"></p>
   </div>
@@ -191,6 +198,7 @@
         status.textContent = "✅ تم العثور على جميع الصور. يمكنك الآن تخصيص المنصة.";
         status.className = "success";
         document.getElementById("step2").classList.remove("hidden");
+        window.scrollTo({ top: document.getElementById("step2").offsetTop, behavior: 'smooth' });
       } else {
         status.innerHTML = `❌ الصور التالية غير موجودة:<br>${missing.join("<br>")}`;
         status.className = "error";
@@ -202,9 +210,9 @@
       const form = new FormData(this);
       const config = {
         logoType: form.get("logoType"),
+        logoImageShape: form.get("logoImageShape"),
         logoImageHeight: parseInt(form.get("logoImageHeight")) || 180,
         logoImageWidthPercent: parseInt(form.get("logoImageWidthPercent")) || 50,
-        logoImageShape: form.get("logoImageShape") || "fixed",
         logoText: form.get("logoText"),
         logoTextColor: form.get("logoTextColor"),
         logoTextFont: form.get("logoTextFont"),
@@ -223,14 +231,13 @@
       const blob = new Blob([
         `const config = ${JSON.stringify(config, null, 2)};`
       ], { type: "application/javascript" });
-
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
       link.download = "config.js";
       link.click();
 
-      document.getElementById("downloadStatus").textContent = "✅ تم إنشاء ملف التخصيص بنجاح. قم برفعه إلى مجلد المشروع على GitHub.";
+      document.getElementById("downloadStatus").textContent = "✅ تم تحميل ملف config.js بنجاح. الرجاء رفعه إلى مجلد المشروع الرئيسي.";
     });
   </script>
 </body>
