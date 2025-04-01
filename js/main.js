@@ -12,7 +12,7 @@ function generateImage(designNumber) {
 
     const settings = nameSettings[designNumber] || { fontSize: 36, fontColor: '#006699', x: img.width / 2, y: 500 };
 
-    const settings = designSettings[designNumber] || { fontSize: 36, fontColor: '#006699', x: img.width / 2, y: 500 };
+  //  const settings = designSettings[designNumber] || { fontSize: 36, fontColor: '#006699', x: img.width / 2, y: 500 };
 
     // 🔧 حل Safari: إجبار تحميل الخط
     const safariFix = document.createElement('div');
