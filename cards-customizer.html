@@ -15,11 +15,8 @@
     h1 {
       color: #006699;
     }
-    .controls {
-      margin-bottom: 10px;
-    }
     select, input[type="number"], input[type="color"] {
-      margin: 6px;
+      margin: 10px;
       padding: 6px;
       font-family: inherit;
     }
@@ -30,7 +27,7 @@
       cursor: move;
     }
     button {
-      margin: 10px 5px;
+      margin-top: 20px;
       padding: 10px 20px;
       font-size: 16px;
       background-color: #006699;
@@ -39,35 +36,39 @@
       border-radius: 6px;
       cursor: pointer;
     }
+    #saveMsg {
+      margin-top: 10px;
+      color: green;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <h1>تخصيص موقع الاسم على البطاقة</h1>
+  <label>اختر البطاقة:
+    <select id="designSelect">
+      <option value="1">تصميم 1</option>
+      <option value="2">تصميم 2</option>
+      <option value="3">تصميم 3</option>
+      <option value="4">تصميم 4</option>
+      <option value="5">تصميم 5</option>
+      <option value="6">تصميم 6</option>
+    </select>
+  </label><br>
+  <label>الحجم: <input type="number" id="fontSize" value="30"></label>
+  <label>اللون: <input type="color" id="fontColor" value="#000000"></label>
+  <label>الخط:
+    <select id="fontFamily">
+      <option value="Tajawal">Tajawal</option>
+      <option value="Amiri">Amiri</option>
+      <option value="Cairo">Cairo</option>
+    </select>
+  </label>
+  <label>X: <input type="number" id="xCoord"></label>
+  <label>Y: <input type="number" id="yCoord"></label><br>
 
-  <div class="controls">
-    <label>اختر البطاقة:
-      <select id="designSelect" onchange="loadDesign()">
-        <option value="1">تصميم 1</option>
-        <option value="2">تصميم 2</option>
-        <option value="3">تصميم 3</option>
-        <option value="4">تصميم 4</option>
-        <option value="5">تصميم 5</option>
-        <option value="6">تصميم 6</option>
-      </select>
-    </label>
-    <label>الحجم: <input type="number" id="fontSize" value="30"></label>
-    <label>اللون: <input type="color" id="fontColor" value="#000000"></label>
-    <label>الخط:
-      <select id="fontFamily">
-        <option value="Tajawal">Tajawal</option>
-        <option value="Amiri">Amiri</option>
-        <option value="Cairo">Cairo</option>
-      </select>
-    </label>
-    <label>X: <input type="number" id="xCoord"></label>
-    <label>Y: <input type="number" id="yCoord"></label>
-    <button onclick="saveCurrentDesign()">💾 حفظ الإعداد</button>
-  </div>
+  <button onclick="saveCurrentDesign()">💾 حفظ إعدادات التصميم الحالي</button>
+  <div id="saveMsg"></div>
 
   <canvas id="previewCanvas" width="600" height="800"></canvas><br>
   <button onclick="downloadSettings()">📥 تحميل nameSettings.js</button>
@@ -75,9 +76,21 @@
 
   <script>
     const settings = {};
-    let isDragging = false, offsetX = 0, offsetY = 0, currentDesign = 1;
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+    let currentDesign = 1;
     const canvas = document.getElementById("previewCanvas");
     const ctx = canvas.getContext("2d");
+    const defaultFontSize = 30;
+    const defaultFontColor = "#000000";
+    const defaultFontFamily = "Tajawal";
+
+    document.querySelectorAll("input, select").forEach(el => {
+      el.addEventListener("input", redraw);
+    });
+
+    document.getElementById("designSelect").addEventListener("change", loadDesign);
 
     function loadDesign() {
       currentDesign = parseInt(document.getElementById("designSelect").value);
@@ -87,19 +100,18 @@
         canvas.width = img.width;
         canvas.height = img.height;
 
-        const s = settings[currentDesign] || {
-          fontSize: 30,
-          fontColor: "#000000",
-          x: img.width / 2,
-          y: img.height / 2
-        };
+        if (settings[currentDesign]) {
+          updateInputs(settings[currentDesign]);
+        } else {
+          // إعدادات افتراضية
+          document.getElementById("fontSize").value = defaultFontSize;
+          document.getElementById("fontColor").value = defaultFontColor;
+          document.getElementById("fontFamily").value = defaultFontFamily;
+          document.getElementById("xCoord").value = Math.round(canvas.width / 2);
+          document.getElementById("yCoord").value = Math.round(canvas.height / 2);
+        }
 
-        document.getElementById("fontSize").value = s.fontSize;
-        document.getElementById("fontColor").value = s.fontColor;
-        document.getElementById("xCoord").value = Math.round(s.x);
-        document.getElementById("yCoord").value = Math.round(s.y);
-
-        redrawCanvas(img);
+        redraw();
 
         canvas.onmousedown = function(e) {
           const rect = canvas.getBoundingClientRect();
@@ -116,30 +128,42 @@
             const y = e.clientY - rect.top;
             document.getElementById("xCoord").value = Math.round(x);
             document.getElementById("yCoord").value = Math.round(y);
-            redrawCanvas(img);
+            redraw();
           }
         };
       };
     }
 
-    function redrawCanvas(img) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0);
-      ctx.font = `bold ${document.getElementById("fontSize").value}px ${document.getElementById("fontFamily").value}`;
-      ctx.fillStyle = document.getElementById("fontColor").value;
-      ctx.textAlign = "center";
-      ctx.fillText("مثال على الاسم", parseInt(document.getElementById("xCoord").value), parseInt(document.getElementById("yCoord").value));
+    function updateInputs(data) {
+      document.getElementById("fontSize").value = data.fontSize;
+      document.getElementById("fontColor").value = data.fontColor;
+      document.getElementById("xCoord").value = data.x;
+      document.getElementById("yCoord").value = data.y;
+    }
+
+    function redraw() {
+      const img = new Image();
+      img.src = `images/design${currentDesign}.jpg`;
+      img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+        ctx.font = `bold ${document.getElementById("fontSize").value}px ${document.getElementById("fontFamily").value}`;
+        ctx.fillStyle = document.getElementById("fontColor").value;
+        ctx.textAlign = "center";
+        ctx.fillText("مثال على الاسم", parseInt(document.getElementById("xCoord").value), parseInt(document.getElementById("yCoord").value));
+      };
     }
 
     function saveCurrentDesign() {
-      const d = currentDesign;
-      settings[d] = {
+      settings[currentDesign] = {
         fontSize: parseInt(document.getElementById("fontSize").value),
         fontColor: document.getElementById("fontColor").value,
         x: parseInt(document.getElementById("xCoord").value),
         y: parseInt(document.getElementById("yCoord").value)
       };
       document.getElementById("savedList").innerText = `✅ تم حفظ إعدادات التصاميم: ${Object.keys(settings).join(", ")}`;
+      document.getElementById("saveMsg").textContent = `✅ تم حفظ تصميم ${currentDesign}`;
+      setTimeout(() => document.getElementById("saveMsg").textContent = "", 3000);
     }
 
     function downloadSettings() {
@@ -151,10 +175,6 @@
       link.download = "nameSettings.js";
       link.click();
     }
-
-    document.querySelectorAll("input, select").forEach(el => {
-      el.addEventListener("input", loadDesign);
-    });
 
     window.onload = loadDesign;
   </script>
