@@ -2,119 +2,236 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>صفحة تخصيص منصة بطاقات التهنئة</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <title>تخصيص منصة بطاقات التهنئة</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap">
   <style>
     body {
       direction: rtl;
       font-family: 'Tajawal', sans-serif;
       background-color: #f9f9f9;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
+      padding: 20px;
       max-width: 800px;
-      margin: 40px auto;
-      background: white;
-      border-radius: 16px;
-      padding: 30px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-      text-align: center;
+      margin: auto;
     }
     h1, h2 {
+      text-align: center;
       color: #006699;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
-    code {
-      background-color: #eee;
-      padding: 4px 8px;
-      border-radius: 6px;
-    }
-    .images-list {
-      text-align: right;
-      margin-bottom: 20px;
-    }
-    .images-list li {
-      margin-bottom: 6px;
-    }
-    .button {
-      background-color: #006699;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    #imageStatus {
-      margin-top: 20px;
+    label {
+      display: block;
+      margin-top: 15px;
       font-weight: bold;
     }
-    .success { color: green; }
-    .error { color: red; }
-    footer {
-      text-align: center;
-      padding: 16px;
-      color: #777;
-      font-size: 14px;
-      margin-top: 40px;
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      max-width: 300px;
+      padding: 6px;
+      margin-top: 5px;
+      font-family: 'Tajawal', sans-serif;
     }
     input[type="color"] {
-  width: 40px;
-  height: 40px;
-  border: 1px solid #ccc;
-  padding: 0;
-  cursor: pointer;
-}
+      width: 60px;
+      height: 35px;
+      padding: 0;
+      border: none;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #006699;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+    }
+    .hidden { display: none; }
+    .success { color: green; font-weight: bold; }
+    .error { color: red; font-weight: bold; }
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      color: #777;
+      font-size: 14px;
+    }
+    .section {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
-  <h1 style="text-align: center; color: #006699; font-family: 'Tajawal', sans-serif;">
-  🎨 تخصيص منصة بطاقات التهنئة
-</h1>
-  <div class="container">
-    <h1>التحقق من الصور المطلوبة</h1>
-    <p>داخل مشروعك <code>images/</code> قبل التخصيص، تأكد من رفع هذه الصور:</p>
-    <ul class="images-list">
-      <li><code>images/logo.png</code> – شعار الجهة</li>
-      <li><code>images/design1.jpg</code> – تصميم البطاقة 1</li>
-      <li><code>images/design2.jpg</code> – تصميم البطاقة 2</li>
-      <li><code>images/design3.jpg</code> – تصميم البطاقة 3</li>
-      <li><code>images/design4.jpg</code> – تصميم البطاقة 4</li>
-      <li><code>images/design5.jpg</code> – تصميم البطاقة 5</li>
-      <li><code>images/design6.jpg</code> – تصميم البطاقة 6</li>
+
+  <h1>تخصيص منصة بطاقات التهنئة</h1>
+
+  <div class="section">
+    <h2>📂 تحقق من رفع الصور</h2>
+    <p>يرجى التأكد من رفع الصور التالية داخل مجلد <code>images/</code>:</p>
+    <ul>
+      <li><strong>logo.png</strong> (الشعار)</li>
+      <li><strong>design1.jpg</strong> إلى <strong>design6.jpg</strong> (تصاميم البطاقات)</li>
     </ul>
-    <button class="button" onclick="verifyImages()">✔️ تحقق من وجود الصور</button>
+    <button onclick="verifyImages()">✅ تحقق من وجود الصور</button>
     <p id="imageStatus"></p>
   </div>
 
-  <footer>© 2025 جميع الحقوق محفوظة للمطور أبو تميم</footer>
+  <div id="step2" class="section hidden">
+    <h2>🛠 إعدادات التخصيص</h2>
+    <form id="customForm">
+
+      <!-- الشعار -->
+      <label>نوع الشعار:</label>
+      <select name="logoType" onchange="toggleLogoOptions(this.value)">
+        <option value="image">صورة</option>
+        <option value="text">نص</option>
+      </select>
+
+      <div id="logoImageOptions">
+        <label>شكل الشعار:</label>
+        <select name="logoImageShape" onchange="toggleImageShapeOptions(this.value)">
+          <option value="fixed">ثابت</option>
+          <option value="responsive">ممتد</option>
+        </select>
+
+        <div id="fixedHeightOption">
+          <label>ارتفاع الصورة (بكسل):</label>
+          <input type="number" name="logoImageHeight" value="180">
+        </div>
+
+        <div id="responsiveOption" class="hidden">
+          <label>نسبة العرض (%):</label>
+          <input type="number" name="logoImageWidthPercent" value="50">
+        </div>
+      </div>
+
+      <div id="logoTextOptions" class="hidden">
+        <label>نص الشعار:</label>
+        <input type="text" name="logoText" value="جهة افتراضية">
+        <label>لون النص:</label>
+        <input type="color" name="logoTextColor" value="#006699">
+        <label>نوع الخط:</label>
+        <select name="logoTextFont">
+          <option value="Tajawal">Tajawal</option>
+          <option value="Amiri">Amiri</option>
+          <option value="Cairo">Cairo</option>
+        </select>
+        <label>حجم الخط:</label>
+        <input type="number" name="logoTextSize" value="24">
+      </div>
+
+      <!-- نصوص وألوان -->
+      <label>المناسبة (مثال: العيد، التخرج):</label>
+      <input type="text" name="occasionText" value="عيد الفطر">
+
+      <label>عنوان الصفحة:</label>
+      <input type="text" name="pageTitle" value="بطاقات العيد - كل عام وأنتم بخير">
+
+      <label>لون الخلفية:</label>
+      <input type="color" name="backgroundColor" value="#f9f9f9">
+
+      <label>لون الأزرار:</label>
+      <input type="color" name="buttonColor" value="#006699">
+
+      <!-- الحقوق -->
+      <label>الجهة في التذييل:</label>
+      <input type="text" name="footerEntityName" value="جمعية فزعة للإغاثة بالزلفي">
+
+      <label>السنة:</label>
+      <input type="text" name="footerYear" value="2025">
+
+      <!-- عداد الزوار -->
+      <label>رمز عداد الزوار:</label>
+      <input type="text" name="visitorBadgeBase" value="eid99999-cards">
+
+      <label><input type="checkbox" name="enableVisitorBadge" checked> تفعيل عداد الزوار</label>
+
+      <label>عدد التصاميم (من 1 إلى 6):</label>
+      <input type="number" name="designCount" value="6" min="1" max="6">
+
+      <button type="submit">📥 تحميل ملف config.js</button>
+    </form>
+    <p id="downloadStatus"></p>
+  </div>
+
+  <footer>© جميع الحقوق محفوظة للمطور أبو تميم 2025</footer>
 
   <script>
+    function toggleLogoOptions(value) {
+      document.getElementById("logoImageOptions").classList.toggle("hidden", value !== "image");
+      document.getElementById("logoTextOptions").classList.toggle("hidden", value !== "text");
+    }
+
+    function toggleImageShapeOptions(shape) {
+      document.getElementById("fixedHeightOption").classList.toggle("hidden", shape !== "fixed");
+      document.getElementById("responsiveOption").classList.toggle("hidden", shape !== "responsive");
+    }
+
     async function verifyImages() {
       const required = ["logo.png", ...Array.from({length: 6}, (_, i) => `design${i+1}.jpg`)];
       const status = document.getElementById("imageStatus");
       let missing = [];
-      await Promise.all(required.map(async name => {
+
+      await Promise.all(required.map(async (name) => {
         try {
           const res = await fetch(`images/${name}`, { method: "HEAD" });
           if (!res.ok) missing.push(name);
-        } catch (_) {
-          missing.push(name);
-        }
+        } catch (_) { missing.push(name); }
       }));
+
       if (missing.length === 0) {
+        status.textContent = "✅ تم العثور على جميع الصور. يمكنك الآن تخصيص المنصة.";
         status.className = "success";
-        status.innerHTML = "✔️ تم العثور على الصور. يتم الانتقال للتخصيص...";
-        setTimeout(() => {
-          window.location.href = "customizer-step2.html";
-        }, 1200);
+        document.getElementById("step2").classList.remove("hidden");
       } else {
+        status.innerHTML = `❌ الصور التالية غير موجودة:<br>${missing.join("<br>")}`;
         status.className = "error";
-        status.innerHTML = `❌ الصور غير موجودة:<br><code>${missing.join("</code><br><code>")}</code>`;
       }
     }
+
+    document.getElementById("customForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const form = new FormData(this);
+      const config = {
+        logoType: form.get("logoType"),
+        logoImageHeight: parseInt(form.get("logoImageHeight")) || 180,
+        logoImageWidthPercent: parseInt(form.get("logoImageWidthPercent")) || 50,
+        logoImageShape: form.get("logoImageShape") || "fixed",
+        logoText: form.get("logoText"),
+        logoTextColor: form.get("logoTextColor"),
+        logoTextFont: form.get("logoTextFont"),
+        logoTextSize: parseInt(form.get("logoTextSize")) || 24,
+        occasionText: form.get("occasionText"),
+        pageTitle: form.get("pageTitle"),
+        backgroundColor: form.get("backgroundColor"),
+        buttonColor: form.get("buttonColor"),
+        footerEntityName: form.get("footerEntityName"),
+        footerYear: form.get("footerYear"),
+        visitorBadgeBase: form.get("visitorBadgeBase"),
+        enableVisitorBadge: form.get("enableVisitorBadge") === "on",
+        designCount: parseInt(form.get("designCount")) || 6
+      };
+
+      const blob = new Blob([
+        `const config = ${JSON.stringify(config, null, 2)};`
+      ], { type: "application/javascript" });
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "config.js";
+      link.click();
+
+      document.getElementById("downloadStatus").textContent = "✅ تم إنشاء ملف التخصيص بنجاح. قم برفعه إلى مجلد المشروع على GitHub.";
+    });
   </script>
 </body>
 </html>
