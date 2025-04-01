@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>تخصيص مكان الاسم على البطاقات</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo&family=Tajawal&display=swap" rel="stylesheet" />
   <style>
     body {
       direction: rtl;
@@ -24,7 +24,6 @@
       border: 1px solid #ccc;
       margin-top: 20px;
       max-width: 100%;
-      cursor: move;
     }
     button {
       margin-top: 20px;
@@ -39,7 +38,8 @@
   </style>
 </head>
 <body>
-  <h1>تخصيص موقع الاسم على البطاقة</h1>
+  <h1>🖋 تخصيص موقع الاسم على البطاقات</h1>
+
   <label>اختر البطاقة:
     <select id="designSelect" onchange="loadDesign()">
       <option value="1">تصميم 1</option>
@@ -49,8 +49,16 @@
       <option value="5">تصميم 5</option>
       <option value="6">تصميم 6</option>
     </select>
+  </label><br>
+
+  <label>الخط:
+    <select id="fontFamily">
+      <option value="Tajawal">Tajawal</option>
+      <option value="Cairo">Cairo</option>
+      <option value="Amiri">Amiri</option>
+    </select>
   </label>
-  <br>
+
   <label>الحجم: <input type="number" id="fontSize" value="36"></label>
   <label>اللون: <input type="color" id="fontColor" value="#006699"></label>
   <label>X: <input type="number" id="xCoord" value="300"></label>
@@ -61,68 +69,40 @@
 
   <br>
   <button onclick="saveCurrentDesign()">💾 حفظ إعدادات التصميم الحالي</button>
-  <button onclick="downloadSettings()">📅 تحميل nameSettings.js</button>
+  <button onclick="downloadSettings()">📥 تحميل nameSettings.js</button>
 
-  <p id="downloadStatus"></p>
+  <p id="saveStatus" style="margin-top: 10px; font-weight: bold;"></p>
 
   <script>
     const settings = {};
-    let dragging = false;
-    let offsetX = 0, offsetY = 0;
-    let mouseX = 0, mouseY = 0;
-
-    const canvas = document.getElementById("previewCanvas");
-    const ctx = canvas.getContext("2d");
-    const sampleText = "مثال على الاسم";
+    const savedDesigns = new Set();
 
     function loadDesign() {
       const designNum = document.getElementById("designSelect").value;
       const img = new Image();
       img.src = `images/design${designNum}.jpg`;
       img.onload = () => {
+        const canvas = document.getElementById("previewCanvas");
+        const ctx = canvas.getContext("2d");
         canvas.width = img.width;
         canvas.height = img.height;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0);
 
-        drawText();
+        // تحميل النص
+        const font = document.getElementById("fontFamily").value;
+        const size = document.getElementById("fontSize").value;
+        const color = document.getElementById("fontColor").value;
+        const x = document.getElementById("xCoord").value;
+        const y = document.getElementById("yCoord").value;
+
+        ctx.font = `bold ${size}px ${font}`;
+        ctx.fillStyle = color;
+        ctx.textAlign = "center";
+        ctx.fillText("مثال على الاسم", parseInt(x), parseInt(y));
       };
     }
-
-    function drawText() {
-      const fontSize = parseInt(document.getElementById("fontSize").value);
-      const fontColor = document.getElementById("fontColor").value;
-      const x = parseInt(document.getElementById("xCoord").value);
-      const y = parseInt(document.getElementById("yCoord").value);
-
-      ctx.font = `bold ${fontSize}px Tajawal`;
-      ctx.fillStyle = fontColor;
-      ctx.textAlign = "center";
-      ctx.fillText(sampleText, x, y);
-    }
-
-    canvas.addEventListener("mousedown", function(e) {
-      const rect = canvas.getBoundingClientRect();
-      mouseX = e.clientX - rect.left;
-      mouseY = e.clientY - rect.top;
-      dragging = true;
-    });
-
-    canvas.addEventListener("mousemove", function(e) {
-      if (dragging) {
-        const rect = canvas.getBoundingClientRect();
-        offsetX = e.clientX - rect.left;
-        offsetY = e.clientY - rect.top;
-        document.getElementById("xCoord").value = offsetX;
-        document.getElementById("yCoord").value = offsetY;
-        loadDesign();
-      }
-    });
-
-    canvas.addEventListener("mouseup", function() {
-      dragging = false;
-    });
 
     function saveCurrentDesign() {
       const d = parseInt(document.getElementById("designSelect").value);
@@ -131,12 +111,18 @@
         fontColor: document.getElementById("fontColor").value,
         x: parseInt(document.getElementById("xCoord").value),
         y: parseInt(document.getElementById("yCoord").value),
+        font: document.getElementById("fontFamily").value
       };
-      alert("✅ تم حفظ إعدادات تصميم " + d);
+      savedDesigns.add(d);
+      document.getElementById("saveStatus").textContent = `✅ تم حفظ إعدادات تصميم ${d}`;
     }
 
     function downloadSettings() {
-      const savedDesigns = Object.keys(settings).sort((a,b)=>a-b).map(n => `تصميم ${n}`).join("، ");
+      if (savedDesigns.size === 0) {
+        alert("⚠️ لم تقم بحفظ أي إعدادات بعد.");
+        return;
+      }
+
       const blob = new Blob([
         "const nameSettings = " + JSON.stringify(settings, null, 2) + ";"
       ], { type: "application/javascript" });
@@ -146,10 +132,13 @@
       link.download = "nameSettings.js";
       link.click();
 
-      document.getElementById("downloadStatus").textContent = `✅ تم تحميل الملف. الإعدادات المحفوظة: ${savedDesigns}`;
+      alert("✅ تم تحميل الملف. تم تخصيص التصاميم التالية: " + [...savedDesigns].sort().join(", "));
     }
 
-    document.querySelectorAll("input").forEach(input => input.addEventListener("input", loadDesign));
+    document.querySelectorAll("input, select").forEach(input => {
+      input.addEventListener("input", loadDesign);
+    });
+
     window.onload = loadDesign;
   </script>
 </body>
