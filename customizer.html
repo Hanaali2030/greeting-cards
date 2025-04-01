@@ -3,97 +3,102 @@
 <head>
   <meta charset="UTF-8">
   <title>صفحة تخصيص منصة بطاقات التهنئة</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
   <style>
     body {
       font-family: 'Tajawal', sans-serif;
-      direction: rtl;
-      text-align: center;
       background-color: #f9f9f9;
       padding: 20px;
+      direction: rtl;
+      text-align: center;
     }
-    h1 {
-      color: #000;
+    .hidden { display: none; }
+    .card {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     }
-    .message {
-      margin: 20px;
-      font-size: 18px;
+    input[type="text"], select, input[type="number"], input[type="color"] {
+      padding: 8px;
+      margin: 6px 0;
+      width: 90%;
+      max-width: 400px;
+      font-size: 15px;
     }
-    .hidden {
-      display: none;
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      background-color: #006699;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
     }
-    code {
-      background-color: #eee;
-      padding: 4px 6px;
-      border-radius: 5px;
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    ul li {
+      background: #eef5f9;
+      margin: 6px auto;
+      padding: 10px;
+      max-width: 400px;
+      border-radius: 6px;
     }
   </style>
 </head>
 <body>
-  <h1>صفحة تخصيص منصة بطاقات التهنئة</h1>
-  <div id="status" class="message"></div>
-  <div id="auth" class="message hidden"></div>
+  <div class="card" id="step1">
+    <h2>🔔 تنبيه قبل التخصيص</h2>
+    <p>لإتمام التخصيص بشكل صحيح، تأكد أولاً من رفع الصور التالية إلى مجلد <code>images/</code>:</p>
+    <ul>
+      <li>images/logo.png</li>
+      <li>images/design1.jpg</li>
+      <li>images/design2.jpg</li>
+      <li>images/design3.jpg</li>
+      <li>images/design4.jpg</li>
+      <li>images/design5.jpg</li>
+      <li>images/design6.jpg</li>
+    </ul>
+    <p>عند التأكد من رفعها، اضغط الزر أدناه للتأكد الآلي والانتقال للتخصيص.</p>
+    <button onclick="checkImages()">✅ أنا جاهز، تحقق من الصور</button>
+  </div>
+
+  <div class="card hidden" id="step2">
+    <h2>✏️ تخصيص المنصة</h2>
+    <!-- هنا سيتم لاحقًا إدراج نموذج التخصيص -->
+    <p>🚧 جاري الإعداد لنموذج التخصيص...</p>
+  </div>
 
   <script>
-    const clientId = "Ov23liOBq92H0U6KEfAn";
+    const imageList = [
+      "logo.png",
+      "design1.jpg",
+      "design2.jpg",
+      "design3.jpg",
+      "design4.jpg",
+      "design5.jpg",
+      "design6.jpg"
+    ];
 
-    async function startDeviceFlow() {
-      const res = await fetch("https://github.com/login/device/code", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({
-          client_id: clientId,
-          scope: "repo"
+    async function checkImages() {
+      const checks = await Promise.all(
+        imageList.map(name => {
+          return fetch(`images/${name}`, { method: 'HEAD' }).then(r => r.ok);
         })
-      });
-      const data = await res.json();
+      );
+      const allExist = checks.every(result => result);
 
-      document.getElementById("auth").classList.remove("hidden");
-      document.getElementById("auth").innerHTML = `
-        <p>افتح رابط <a href="${data.verification_uri}" target="_blank">GitHub.com</a> وأدخل الرمز:</p>
-        <code>${data.user_code}</code>
-      `;
-
-      const interval = setInterval(async () => {
-        const tokenRes = await fetch("https://github.com/login/oauth/access_token", {
-          method: "POST",
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Accept': 'application/json'
-          },
-          body: new URLSearchParams({
-            client_id: clientId,
-            device_code: data.device_code,
-            grant_type: 'urn:ietf:params:oauth:grant-type:device_code'
-          })
-        });
-
-        const tokenData = await tokenRes.json();
-
-        if (tokenData.access_token) {
-          clearInterval(interval);
-          window.githubToken = tokenData.access_token;
-          document.getElementById("auth").innerHTML = "✔️ تم تسجيل الدخول نجاحًا! جاهز للتخصيص.";
-          // تابع عرض النموذج هنا بعد التوثيق
-        } else if (tokenData.error && tokenData.error !== 'authorization_pending') {
-          clearInterval(interval);
-          document.getElementById("auth").innerHTML = `حدث خطأ: ${tokenData.error}`;
-        }
-      }, data.interval * 1000);
-    }
-
-    // تحقق هل المستخدم في مشروع Fork أم لا
-    const owner = "greeting-cards"; // حسابك الأساسي
-    const repo = "eid-cards";
-    const userRepo = location.hostname.split(".")[0];
-
-    if (userRepo !== owner) {
-      document.getElementById("status").innerHTML = "✔️ جميع الصور موجودة. يمكنك الآن تخصيص المنصة.";
-      startDeviceFlow();
-    } else {
-      document.getElementById("status").innerHTML = "❌ الرجاء تسجيل الدخول بموقع GitHub والتأكد من ملكية المشروع (قم بعمل Fork أولاً).";
+      if (allExist) {
+        document.getElementById("step1").classList.add("hidden");
+        document.getElementById("step2").classList.remove("hidden");
+      } else {
+        alert("🚫 لم يتم العثور على جميع الصور. تأكد من رفعها إلى مجلد images بنفس الأسماء.");
+      }
     }
   </script>
 </body>
