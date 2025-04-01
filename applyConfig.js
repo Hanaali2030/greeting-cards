@@ -14,20 +14,23 @@ window.addEventListener("DOMContentLoaded", () => {
   style.innerHTML = `.button, button, a.button { background-color: ${config.buttonColor || "#006699"} !important; }`;
   document.head.appendChild(style);
 
-  // 4) الشعار
-  const logoContainer = document.getElementById("logo");
-  if (logoContainer) {
-    if (config.logoType === "image") {
-      logoContainer.innerHTML = `<img src="images/logo.png" style="height:${config.logoImageHeight}px;">`;
-    } else {
-      logoContainer.innerHTML = `<div style="font-family: ${config.logoTextFont}; font-size: ${config.logoTextSize}px; color: ${config.logoTextColor};">${config.logoText}</div>`;
+  // 4) الشعار - ننتظر تحميل header.html
+  const waitForLogo = setInterval(() => {
+    const logoContainer = document.getElementById("logo");
+    if (logoContainer) {
+      if (config.logoType === "image") {
+        logoContainer.innerHTML = `<img src="images/logo.png" style="height:${config.logoImageHeight}px;">`;
+      } else {
+        logoContainer.innerHTML = `<div style="font-family: ${config.logoTextFont}; font-size: ${config.logoTextSize}px; color: ${config.logoTextColor};">${config.logoText}</div>`;
+      }
+      clearInterval(waitForLogo);
     }
-  }
-  
+  }, 100);
+
   // 5) نص المناسبة
   const occasionEl = document.getElementById("occasion");
   if (occasionEl) {
-occasionEl.innerText = `اختر بطاقتك ل${config.occasionText} 🎉`;
+    occasionEl.innerText = `اختر بطاقتك ل${config.occasionText} 🎉`;
   }
 
   // 6) الحقوق
