@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>تخصيص منصة بطاقات التهنئة</title>
   <link rel="stylesheet" href="style.css">
-    <style>
+  <style>
     body {
       direction: rtl;
       font-family: 'Tajawal', sans-serif;
@@ -14,45 +14,50 @@
       padding: 0;
     }
     .container {
-      max-width: 800px;
+      max-width: 700px;
       margin: 40px auto;
-      background: white;
-      border-radius: 16px;
       padding: 30px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      background: white;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      border-radius: 16px;
+    }
+    h1 {
       text-align: center;
-    }
-    h1, h2 {
       color: #006699;
-      margin-bottom: 20px;
+      font-size: 26px;
+      margin-bottom: 30px;
     }
-    code {
-      background-color: #eee;
-      padding: 4px 8px;
-      border-radius: 6px;
+    label {
+      font-weight: bold;
+      margin-top: 12px;
+      display: block;
     }
-    .images-list {
-      text-align: right;
-      margin-bottom: 20px;
+    input, select {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      margin-top: 4px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
     }
-    .images-list li {
-      margin-bottom: 6px;
-    }
-    .button {
+    button {
       background-color: #006699;
       color: white;
-      padding: 10px 20px;
+      padding: 12px 20px;
+      font-size: 16px;
       border: none;
       border-radius: 8px;
-      font-size: 16px;
       cursor: pointer;
     }
-    #imageStatus {
+    button:hover {
+      background-color: #004f73;
+    }
+    .success {
+      color: green;
       margin-top: 20px;
       font-weight: bold;
     }
-    .success { color: green; }
-    .error { color: red; }
     footer {
       text-align: center;
       padding: 16px;
@@ -60,10 +65,12 @@
       font-size: 14px;
       margin-top: 40px;
     }
+
+    .hidden { display: none; }
     input[type="color"] {
-  width: 35px;
-  height: 35px;
-  border: 0px solid #ccc;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ccc;
   padding: 0;
   cursor: pointer;
 }
