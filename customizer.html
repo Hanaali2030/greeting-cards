@@ -74,14 +74,18 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.05);
       margin-top: 20px;
     }
-        .back-button {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      background-color: #ccc;
-      color: black;
+    .btn-back {
+      text-decoration: none;
+      background-color: #e0e0e0;
+      color: #333;
+      padding: 6px 14px;
+      border-radius: 8px;
       font-size: 14px;
-      padding: 6px 12px;
+      transition: background-color 0.3s;
+    }
+
+    .btn-back:hover {
+      background-color: #d0d0d0;
     }
     footer {
       margin-top: 50px;
@@ -91,8 +95,10 @@
   </style>
 </head>
 <body>
-  <a class="back-button" href="dashboard.html">⬅ العودة للوحة التخصيص</a>
-  <h1>🎨 تخصيص منصة بطاقات التهنئة</h1>
+    <header>
+    <a class="btn-back" href="customization.html">← العودة لصفحة التخصيص الرئيسية</a>
+    <h1 style="margin: 0 auto;">🎨 تخصيص منصة بطاقات التهنئة</h1>
+  </header>
 
   <div class="section">
     <h2>📂 تأكد من رفع الصور</h2>
