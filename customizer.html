@@ -2,97 +2,71 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>صفحة تخصيص منصة بطاقات التهنئة</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
+      direction: rtl;
       font-family: 'Tajawal', sans-serif;
       background-color: #f9f9f9;
       margin: 0;
       padding: 0;
-      text-align: center;
     }
-
     .container {
       max-width: 800px;
       margin: 40px auto;
-      background-color: white;
-      padding: 30px;
+      background: white;
       border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 30px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      text-align: center;
     }
-
-    h1 {
+    h1, h2 {
       color: #006699;
       margin-bottom: 20px;
-      font-size: 28px;
     }
-
-    h2 {
-      margin-top: 40px;
-      color: #444;
-    }
-
-    ul {
-      text-align: right;
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
-      padding: 6px 0;
-      font-size: 16px;
-    }
-
     code {
       background-color: #eee;
       padding: 4px 8px;
       border-radius: 6px;
-      font-size: 15px;
     }
-
-    button {
+    .images-list {
+      text-align: right;
+      margin-bottom: 20px;
+    }
+    .images-list li {
+      margin-bottom: 6px;
+    }
+    .button {
       background-color: #006699;
       color: white;
-      font-size: 16px;
-      font-family: 'Tajawal', sans-serif;
-      padding: 10px 24px;
+      padding: 10px 20px;
       border: none;
       border-radius: 8px;
-      margin-top: 20px;
+      font-size: 16px;
       cursor: pointer;
     }
-
-    button:hover {
-      background-color: #005a85;
+    #imageStatus {
+      margin-top: 20px;
+      font-weight: bold;
     }
-
-    .success, .error, #downloadStatus {
-      margin-top: 16px;
-      font-size: 16px;
-    }
-
-    .success {
-      color: green;
-    }
-
-    .error {
-      color: red;
-    }
-
+    .success { color: green; }
+    .error { color: red; }
     footer {
-      margin-top: 40px;
-      font-size: 14px;
+      text-align: center;
+      padding: 16px;
       color: #777;
+      font-size: 14px;
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>✅ التحقق من الصور المطلوبة</h1>
-    <p>داخل مشروعك، تأكد من رفع هذه الصور إلى مجلد <code>images/</code>:</p>
-    <ul>
+    <h1>التحقق من الصور المطلوبة</h1>
+    <p>داخل مشروعك <code>images/</code> قبل التخصيص، تأكد من رفع هذه الصور:</p>
+    <ul class="images-list">
       <li><code>images/logo.png</code> – شعار الجهة</li>
       <li><code>images/design1.jpg</code> – تصميم البطاقة 1</li>
       <li><code>images/design2.jpg</code> – تصميم البطاقة 2</li>
@@ -101,40 +75,35 @@
       <li><code>images/design5.jpg</code> – تصميم البطاقة 5</li>
       <li><code>images/design6.jpg</code> – تصميم البطاقة 6</li>
     </ul>
-    <button onclick="verifyImages()">تحقق من وجود الصور ✅</button>
+    <button class="button" onclick="verifyImages()">✔️ تحقق من وجود الصور</button>
     <p id="imageStatus"></p>
-
-    <!-- بقية صفحة التخصيص يتم إدراجها هنا بعد التأكد -->
-    <div id="step2" class="hidden">
-      <!-- تخصيص يظهر بعد التحقق -->
-    </div>
   </div>
 
-  <footer>
-    © 2025 جميع الحقوق محفوظة للمطور <strong>أبو تميم</strong>
-  </footer>
+  <footer>© 2025 جميع الحقوق محفوظة للمطور أبو تميم</footer>
 
   <script>
-    function verifyImages() {
+    async function verifyImages() {
       const required = ["logo.png", ...Array.from({length: 6}, (_, i) => `design${i+1}.jpg`)];
       const status = document.getElementById("imageStatus");
       let missing = [];
-
-      Promise.all(required.map(async name => {
+      await Promise.all(required.map(async name => {
         try {
-          const res = await fetch(`images/${name}`, { method: 'HEAD' });
+          const res = await fetch(`images/${name}`, { method: "HEAD" });
           if (!res.ok) missing.push(name);
-        } catch (_) { missing.push(name); }
-      })).then(() => {
-        if (missing.length === 0) {
-          status.textContent = "✅ تم العثور على جميع الصور. يمكنك المتابعة في التخصيص.";
-          status.className = "success";
-          document.getElementById("step2").classList.remove("hidden");
-        } else {
-          status.innerHTML = `❌ الصور التالية مفقودة:<br>${missing.map(m => `<code>images/${m}</code>`).join('<br>')}`;
-          status.className = "error";
+        } catch (_) {
+          missing.push(name);
         }
-      });
+      }));
+      if (missing.length === 0) {
+        status.className = "success";
+        status.innerHTML = "✔️ تم العثور على الصور. يتم الانتقال للتخصيص...";
+        setTimeout(() => {
+          window.location.href = "customizer-step2.html";
+        }, 1200);
+      } else {
+        status.className = "error";
+        status.innerHTML = `❌ الصور غير موجودة:<br><code>${missing.join("</code><br><code>")}</code>`;
+      }
     }
   </script>
 </body>
