@@ -16,21 +16,21 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // 4) الشعار - ننتظر تحميل header.html
   const waitForLogo = setInterval(() => {
-    const logoContainer = document.getElementById("logo");
-    if (logoContainer) {
-      if (config.logoType === "image") {
-  if (config.logoImageShape === "responsive") {
-    logoContainer.innerHTML = `<img src="images/logo.png" style="width:${config.logoImageWidthPercent}%; max-width:100%; height:auto;">`;
-  } else {
-    logoContainer.innerHTML = `<img src="images/logo.png" style="height:${config.logoImageHeight}px;">`;
-  }
-}
- else {
-        logoContainer.innerHTML = `<div style="font-family: ${config.logoTextFont}; font-size: ${config.logoTextSize}px; color: ${config.logoTextColor};">${config.logoText}</div>`;
+  const logoContainer = document.getElementById("logo");
+  if (logoContainer) {
+    if (config.logoType === "image") {
+      if (config.logoImageShape === "responsive") {
+        logoContainer.innerHTML = `<img src="images/logo.png" alt="شعار الجهة" style="width:${config.logoImageWidthPercent}%; max-width:100%; height:auto;">`;
+      } else {
+        logoContainer.innerHTML = `<img src="images/logo.png" alt="شعار الجهة" style="height:${config.logoImageHeight}px;">`;
       }
-      clearInterval(waitForLogo);
+    } else {
+      logoContainer.innerHTML = `<div style="font-family: ${config.logoTextFont}; font-size: ${config.logoTextSize}px; color: ${config.logoTextColor};">${config.logoText}</div>`;
     }
-  }, 100);
+    clearInterval(waitForLogo);
+  }
+}, 100);
+
 
   // 5) نص المناسبة
   const occasionEl = document.getElementById("occasion");
