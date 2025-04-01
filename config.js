@@ -13,5 +13,5 @@ const config = {
   "footerYear": "2030",
   "visitorBadgeBase": "eid99999114-cards",
   "enableVisitorBadge": true,
-  "designCount": 4
+  "designCount": 6
 };
