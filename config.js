@@ -6,7 +6,7 @@ const config = {
   "logoText": "منصة بطاقات التهنئة",
   "logoTextColor": "#0e711a",
   "logoTextFont": "Tajawal",
-  "logoTextSize": 24,
+  "logoTextSize": 80,
   "occasionText": "عيد الفطر",
   "pageTitle": "بطاقات العيد - كل عام وأنتم بخير",
   "backgroundColor": "#bee2fe",
