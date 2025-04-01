@@ -6,100 +6,140 @@
   <link rel="stylesheet" href="style.css">
   <style>
     body {
+      direction: rtl;
       font-family: 'Tajawal', sans-serif;
       background-color: #f9f9f9;
       padding: 20px;
-      direction: rtl;
-      text-align: center;
+    }
+    h1, h2 {
+      color: #006699;
+      margin-bottom: 10px;
     }
     .hidden { display: none; }
-    .card {
-      max-width: 600px;
-      margin: 0 auto;
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-    }
-    input[type="text"], select, input[type="number"], input[type="color"] {
-      padding: 8px;
-      margin: 6px 0;
-      width: 90%;
-      max-width: 400px;
-      font-size: 15px;
+    .success { color: green; }
+    .error { color: red; }
+    label { display: block; margin-top: 10px; }
+    input, select {
+      width: 100%; max-width: 300px; padding: 5px; margin-top: 5px;
     }
     button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      background-color: #006699;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
-    ul li {
-      background: #eef5f9;
-      margin: 6px auto;
-      padding: 10px;
-      max-width: 400px;
-      border-radius: 6px;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
-  <div class="card" id="step1">
-    <h2>🔔 تنبيه قبل التخصيص</h2>
-    <p>لإتمام التخصيص بشكل صحيح، تأكد أولاً من رفع الصور التالية إلى مجلد <code>images/</code>:</p>
-    <ul>
-      <li>images/logo.png</li>
-      <li>images/design1.jpg</li>
-      <li>images/design2.jpg</li>
-      <li>images/design3.jpg</li>
-      <li>images/design4.jpg</li>
-      <li>images/design5.jpg</li>
-      <li>images/design6.jpg</li>
-    </ul>
-    <p>عند التأكد من رفعها، اضغط الزر أدناه للتأكد الآلي والانتقال للتخصيص.</p>
-    <button onclick="checkImages()">✅ أنا جاهز، تحقق من الصور</button>
-  </div>
+  <h1>📂 التحقق من وجود الصور قبل التخصيص</h1>
+  <p>يرجى رفع الصور التالية يدويًا إلى مجلد <code>images/</code> في مشروعك قبل المتابعة:</p>
+  <ul>
+    <li><code>logo.png</code> (شعار الجهة)</li>
+    <li><code>design1.jpg</code> إلى <code>design6.jpg</code> (تصاميم البطاقات)</li>
+  </ul>
 
-  <div class="card hidden" id="step2">
-    <h2>✏️ تخصيص المنصة</h2>
-    <!-- هنا سيتم لاحقًا إدراج نموذج التخصيص -->
-    <p>🚧 جاري الإعداد لنموذج التخصيص...</p>
+  <button onclick="verifyImages()">✅ تحقق من وجود الصور</button>
+  <p id="imageStatus"></p>
+
+  <!-- قسم التخصيص يظهر فقط بعد تحقق الصور -->
+  <div id="step2" class="hidden">
+    <h2>🛠 تخصيص الإعدادات</h2>
+    <form id="customForm">
+      <label>نوع الشعار:
+        <select name="logoType" onchange="toggleLogoOptions(this.value)">
+          <option value="image">صورة</option>
+          <option value="text">نص</option>
+        </select>
+      </label>
+
+      <div id="logoImageOptions">
+        <label>ارتفاع الصورة (بالبكسل): <input type="number" name="logoImageHeight" value="180"></label>
+      </div>
+
+      <div id="logoTextOptions" class="hidden">
+        <label>النص: <input type="text" name="logoText" value="جهة افتراضية"></label>
+        <label>لون النص: <input type="color" name="logoTextColor" value="#006699"></label>
+        <label>نوع الخط:
+          <select name="logoTextFont">
+            <option value="Tajawal">Tajawal</option>
+            <option value="Amiri">Amiri</option>
+            <option value="Cairo">Cairo</option>
+          </select>
+        </label>
+        <label>حجم الخط: <input type="number" name="logoTextSize" value="24"></label>
+      </div>
+
+      <label>المناسبة (يتم دمجها مع "اختر بطاقتك لـ"): <input type="text" name="occasionText" value="عيد الفطر"></label>
+      <label>عنوان الصفحة: <input type="text" name="pageTitle" value="بطاقات العيد - كل عام وأنتم بخير"></label>
+      <label>لون الخلفية: <input type="color" name="backgroundColor" value="#f9f9f9"></label>
+      <label>لون الأزرار: <input type="color" name="buttonColor" value="#006699"></label>
+      <label>الجهة في التذييل: <input type="text" name="footerEntityName" value="جمعية فزعة للإغاثة بالزلفي"></label>
+      <label>السنة: <input type="text" name="footerYear" value="2025"></label>
+      <label>رمز عداد الزوار (مثل eid99999-cards): <input type="text" name="visitorBadgeBase" value="eid99999-cards"></label>
+      <label>عدد التصاميم (من 1 إلى 6): <input type="number" name="designCount" value="6" min="1" max="6"></label>
+
+      <button type="submit">💾 تحميل ملف التخصيص config.js</button>
+    </form>
+    <p id="downloadStatus"></p>
   </div>
 
   <script>
-    const imageList = [
-      "logo.png",
-      "design1.jpg",
-      "design2.jpg",
-      "design3.jpg",
-      "design4.jpg",
-      "design5.jpg",
-      "design6.jpg"
-    ];
+    function toggleLogoOptions(value) {
+      document.getElementById("logoImageOptions").classList.toggle("hidden", value !== "image");
+      document.getElementById("logoTextOptions").classList.toggle("hidden", value !== "text");
+    }
 
-    async function checkImages() {
-      const checks = await Promise.all(
-        imageList.map(name => {
-          return fetch(`images/${name}`, { method: 'HEAD' }).then(r => r.ok);
-        })
-      );
-      const allExist = checks.every(result => result);
+    async function verifyImages() {
+      const required = ["logo.png", ...Array.from({length: 6}, (_, i) => `design${i+1}.jpg`)];
+      const status = document.getElementById("imageStatus");
+      let missing = [];
 
-      if (allExist) {
-        document.getElementById("step1").classList.add("hidden");
+      await Promise.all(required.map(async (name) => {
+        try {
+          const res = await fetch(`images/${name}`, { method: "HEAD" });
+          if (!res.ok) missing.push(name);
+        } catch (_) { missing.push(name); }
+      }));
+
+      if (missing.length === 0) {
+        status.textContent = "✅ تم العثور على جميع الصور بنجاح. يمكنك الآن تخصيص المنصة.";
+        status.className = "success";
         document.getElementById("step2").classList.remove("hidden");
       } else {
-        alert("🚫 لم يتم العثور على جميع الصور. تأكد من رفعها إلى مجلد images بنفس الأسماء.");
+        status.innerHTML = `❌ الصور التالية غير موجودة:<br>${missing.join("<br>")}`;
+        status.className = "error";
       }
     }
+
+    document.getElementById("customForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const form = new FormData(this);
+      const config = {
+        logoType: form.get("logoType"),
+        logoImageHeight: parseInt(form.get("logoImageHeight")) || 180,
+        logoText: form.get("logoText"),
+        logoTextColor: form.get("logoTextColor"),
+        logoTextFont: form.get("logoTextFont"),
+        logoTextSize: parseInt(form.get("logoTextSize")) || 24,
+        occasionText: form.get("occasionText"),
+        pageTitle: form.get("pageTitle"),
+        backgroundColor: form.get("backgroundColor"),
+        buttonColor: form.get("buttonColor"),
+        footerEntityName: form.get("footerEntityName"),
+        footerYear: form.get("footerYear"),
+        visitorBadgeBase: form.get("visitorBadgeBase"),
+        enableVisitorBadge: true,
+        designCount: parseInt(form.get("designCount")) || 6
+      };
+      const blob = new Blob([
+        `const config = ${JSON.stringify(config, null, 2)};`
+      ], { type: "application/javascript" });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "config.js";
+      link.click();
+
+      document.getElementById("downloadStatus").textContent = "✅ تم إنشاء ملف التخصيص بنجاح. قم باستبداله داخل مشروعك.";
+    });
   </script>
 </body>
 </html>
