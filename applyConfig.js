@@ -19,8 +19,13 @@ window.addEventListener("DOMContentLoaded", () => {
     const logoContainer = document.getElementById("logo");
     if (logoContainer) {
       if (config.logoType === "image") {
-        logoContainer.innerHTML = `<img src="images/logo.png" style="height:${config.logoImageHeight}px;">`;
-      } else {
+  if (config.logoImageShape === "responsive") {
+    logoContainer.innerHTML = `<img src="images/logo.png" style="width:${config.logoImageWidthPercent}%; max-width:100%; height:auto;">`;
+  } else {
+    logoContainer.innerHTML = `<img src="images/logo.png" style="height:${config.logoImageHeight}px;">`;
+  }
+}
+ else {
         logoContainer.innerHTML = `<div style="font-family: ${config.logoTextFont}; font-size: ${config.logoTextSize}px; color: ${config.logoTextColor};">${config.logoText}</div>`;
       }
       clearInterval(waitForLogo);
