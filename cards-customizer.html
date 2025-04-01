@@ -27,7 +27,7 @@
       cursor: move;
     }
     button {
-      margin-top: 20px;
+      margin: 10px;
       padding: 10px 20px;
       font-size: 16px;
       background-color: #006699;
@@ -50,8 +50,8 @@
       <option value="6">تصميم 6</option>
     </select>
   </label><br>
-  <label>الحجم: <input type="number" id="fontSize" value="36"></label>
-  <label>اللون: <input type="color" id="fontColor" value="#006699"></label>
+  <label>الحجم: <input type="number" id="fontSize" value="30"></label>
+  <label>اللون: <input type="color" id="fontColor" value="#000000"></label>
   <label>الخط:
     <select id="fontFamily">
       <option value="Tajawal">Tajawal</option>
@@ -59,11 +59,11 @@
       <option value="Cairo">Cairo</option>
     </select>
   </label>
-  <label>X: <input type="number" id="xCoord" value="300"></label>
-  <label>Y: <input type="number" id="yCoord" value="500"></label><br>
+  <label>X: <input type="number" id="xCoord"></label>
+  <label>Y: <input type="number" id="yCoord"></label><br>
+  <button onclick="saveCurrentDesign()">💾 حفظ إعدادات التصميم الحالي</button>
 
   <canvas id="previewCanvas" width="600" height="800"></canvas><br>
-  <button onclick="saveCurrentDesign()">💾 حفظ إعدادات التصميم الحالي</button>
   <button onclick="downloadSettings()">📥 تحميل nameSettings.js</button>
 
   <p id="savedList"></p>
@@ -71,40 +71,57 @@
   <script>
     const settings = {};
     let isDragging = false;
-    let offsetX = 0;
-    let offsetY = 0;
     let currentDesign = 1;
+    let imageCache = {};
 
     function loadDesign() {
       currentDesign = parseInt(document.getElementById("designSelect").value);
+      const canvas = document.getElementById("previewCanvas");
+      const ctx = canvas.getContext("2d");
       const img = new Image();
       img.src = `images/design${currentDesign}.jpg`;
       img.onload = () => {
-        const canvas = document.getElementById("previewCanvas");
-        const ctx = canvas.getContext("2d");
+        imageCache[currentDesign] = img;
         canvas.width = img.width;
         canvas.height = img.height;
-        redrawCanvas(ctx, img);
 
-        canvas.onmousedown = function(e) {
-          const rect = canvas.getBoundingClientRect();
-          offsetX = e.clientX - rect.left;
-          offsetY = e.clientY - rect.top;
-          isDragging = true;
+        const s = settings[currentDesign] || {
+          fontSize: 30,
+          fontColor: "#000000",
+          x: Math.floor(img.width / 2),
+          y: Math.floor(img.height / 2),
         };
-        canvas.onmouseup = () => isDragging = false;
-        canvas.onmouseout = () => isDragging = false;
-        canvas.onmousemove = function(e) {
-          if (isDragging) {
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            document.getElementById("xCoord").value = Math.round(x);
-            document.getElementById("yCoord").value = Math.round(y);
-            redrawCanvas(ctx, img);
-          }
+
+        document.getElementById("fontSize").value = s.fontSize;
+        document.getElementById("fontColor").value = s.fontColor;
+        document.getElementById("xCoord").value = s.x;
+        document.getElementById("yCoord").value = s.y;
+
+        redrawCanvas(ctx, img);
+      };
+
+      const canvas = document.getElementById("previewCanvas");
+      canvas.onmousedown = function(e) {
+        isDragging = true;
+        updateCoordsFromMouse(e);
+      };
+      canvas.onmouseup = () => isDragging = false;
+      canvas.onmouseout = () => isDragging = false;
+      canvas.onmousemove = function(e) {
+        if (isDragging) {
+          updateCoordsFromMouse(e);
         }
       };
+    }
+
+    function updateCoordsFromMouse(e) {
+      const canvas = document.getElementById("previewCanvas");
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      document.getElementById("xCoord").value = Math.round(x);
+      document.getElementById("yCoord").value = Math.round(y);
+      redrawCanvas(canvas.getContext("2d"), imageCache[currentDesign]);
     }
 
     function redrawCanvas(ctx, img) {
@@ -138,7 +155,9 @@
     }
 
     document.querySelectorAll("input, select").forEach(el => {
-      el.addEventListener("input", loadDesign);
+      el.addEventListener("input", () => {
+        redrawCanvas(document.getElementById("previewCanvas").getContext("2d"), imageCache[currentDesign]);
+      });
     });
 
     window.onload = loadDesign;
